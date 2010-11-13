@@ -142,7 +142,7 @@ extends ErebotModuleBase
     {
         if (!is_string($cmdName)) {
             $translator = $this->getTranslator(NULL);
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Not a valid command name'));
         }
         $cmdName = strtoupper($cmdName);
@@ -175,7 +175,7 @@ extends ErebotModuleBase
     {
         if (!is_string($status) || strlen($status) != 1) {
             $translator = $this->getTranslator(NULL);
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Invalid status'));
         }
 
@@ -198,7 +198,7 @@ extends ErebotModuleBase
     {
         if (!is_string($chan) || strlen($chan) < 1) {
             $translator = $this->getTranslator(NULL);
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Bad channel name'));
         }
 
@@ -213,7 +213,7 @@ extends ErebotModuleBase
     {
         $translator = $this->getTranslator(NULL);
         if (!is_int($list))
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Invalid list type'));
 
         switch ($list) {
@@ -223,25 +223,25 @@ extends ErebotModuleBase
                 if (isset($this->_supported['MAXBANS']) &&
                     ctype_digit($this->_supported['MAXBANS']))
                     return (int) $this->_supported['MAXBANS'];
-                throw new EErebotNotFound($translator->gettext(
+                throw new Erebot_NotFoundException($translator->gettext(
                     'No limit specified'));
 
             case self::LIST_SILENCES:
                 if (isset($this->_supported['SILENCE']) &&
                     ctype_digit($this->_supported['SILENCE']))
                     return (int) $this->_supported['SILENCE'];
-                throw new EErebotNotFound($translator->gettext(
+                throw new Erebot_NotFoundException($translator->gettext(
                     'No silence limit specified'));
 
             case self::LIST_WATCHES:
                 if (isset($this->_supported['WATCH']) &&
                     ctype_digit($this->_supported['WATCH']))
                     return (int) $this->_supported['WATCH'];
-                throw new EErebotNotFound($translator->gettext(
+                throw new Erebot_NotFoundException($translator->gettext(
                     'No watch limit specified'));
 
             default:
-                throw new EErebotInvalidValue($translator->gettext(
+                throw new Erebot_InvalidValueException($translator->gettext(
                     'Invalid list type'));
         }
     }
@@ -250,7 +250,7 @@ extends ErebotModuleBase
     {
         if (!is_string($chanPrefix)) {
             $translator = $this->getTranslator(NULL);
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Bad chan prefix'));
         }
 
@@ -276,7 +276,7 @@ extends ErebotModuleBase
     {
         $translator = $this->getTranslator(NULL);
         if (!is_int($type))
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Invalid text type'));
 
         switch ($type) {
@@ -312,10 +312,10 @@ extends ErebotModuleBase
                 return -1;
 
             default:
-                throw new EErebotInvalidValue($translator->gettext(
+                throw new Erebot_InvalidValueException($translator->gettext(
                     'Invalid text type'));
         }
-        throw new EErebotNotFound($translator->gettext(
+        throw new Erebot_NotFoundException($translator->gettext(
             'No limit defined for this text'));
     }
 
@@ -356,12 +356,12 @@ extends ErebotModuleBase
             $mappingName = $this->getCaseMapping();
 
         if (!is_string($mappingName))
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Invalid mapping name'));
 
         $mappingName = strtolower($mappingName);
         if (!isset(self::$_caseMappings[$mappingName]))
-            throw new EErebotNotFound($translator->gettext(
+            throw new Erebot_NotFoundException($translator->gettext(
                 'No such mapping exists'));
         $mapping = self::$_caseMappings[$mappingName];
 
@@ -375,12 +375,12 @@ extends ErebotModuleBase
             $mappingName = $this->getCaseMapping();
 
         if (!is_string($mappingName))
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Invalid mapping name'));
 
         $mappingName = strtolower($mappingName);
         if (!isset(self::$_caseMappings[$mappingName]))
-            throw new EErebotNotFound($translator->gettext(
+            throw new Erebot_NotFoundException($translator->gettext(
                 'No such mapping exists'));
         $mapping = self::$_caseMappings[$mappingName];
 
@@ -393,7 +393,7 @@ extends ErebotModuleBase
             is_string($this->_supported['CHARSET']))
             return $this->_supported['CHARSET'];
         $translator = $this->getTranslator(NULL);
-        throw new EErebotNotFound($translator->gettext(
+        throw new Erebot_NotFoundException($translator->gettext(
             'No charset specified'));
     }
 
@@ -409,7 +409,7 @@ extends ErebotModuleBase
     {
         $translator = $this->getTranslator(NULL);
         if (!is_int($list))
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Bad channel list ID'));
 
         switch ($list) {
@@ -418,7 +418,7 @@ extends ErebotModuleBase
 
             case self::LIST_EXCEPTS:
                 if (!isset($this->_supported['EXCEPTS']))
-                    throw new EErebotNotFound($translator->gettext(
+                    throw new Erebot_NotFoundException($translator->gettext(
                         'Excepts are not available on this server'));
 
                 if ($this->_supported['EXCEPTS'] === TRUE)
@@ -428,7 +428,7 @@ extends ErebotModuleBase
 
             case self::LIST_INVITES:
                 if (!isset($this->_supported['INVEX']))
-                    throw new EErebotNotFound($translator->gettext(
+                    throw new Erebot_NotFoundException($translator->gettext(
                         'Invites are not available on this server'));
 
                 if ($this->_supported['INVEX'] === TRUE)
@@ -437,7 +437,7 @@ extends ErebotModuleBase
                 break;
 
             default:
-                throw new EErebotInvalidValue($translator->gettext(
+                throw new Erebot_InvalidValueException($translator->gettext(
                     'Invalid channel list ID'));
         }
     }
@@ -446,10 +446,10 @@ extends ErebotModuleBase
     {
         $translator = $this->getTranslator(NULL);
         if (!is_string($mode) || strlen($mode) != 1)
-            throw new EErebotInvalidValue($translator->gettext('Invalid mode'));
+            throw new Erebot_InvalidValueException($translator->gettext('Invalid mode'));
 
         if (!isset($this->_supported['PREFIX']))
-            throw new EErebotNotFound($translator->gettext(
+            throw new Erebot_NotFoundException($translator->gettext(
                 'No mapping for prefixes'));
 
         $ok = preg_match(self::PATTERN_PREFIX,
@@ -461,18 +461,18 @@ extends ErebotModuleBase
                 return $matches[2][$pos];
         }
 
-        throw new EErebotNotFound($translator->gettext('No such mode'));
+        throw new Erebot_NotFoundException($translator->gettext('No such mode'));
     }
 
     public function getChanModeForPrefix($prefix)
     {
         $translator = $this->getTranslator(NULL);
         if (!is_string($prefix) || strlen($prefix) != 1)
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Invalid prefix'));
 
         if (!isset($this->_supported['PREFIX']))
-            throw new EErebotNotFound($translator->gettext(
+            throw new Erebot_NotFoundException($translator->gettext(
                 'No mapping for prefixes'));
 
         $ok = preg_match(self::PATTERN_PREFIX, $this->_supported['PREFIX'], $matches);
@@ -482,19 +482,19 @@ extends ErebotModuleBase
                 return $matches[1][$pos];
         }
 
-        throw new EErebotNotFound($translator->gettext('No such prefix'));
+        throw new Erebot_NotFoundException($translator->gettext('No such prefix'));
     }
 
     public function qualifyChannelMode($mode)
     {
         $translator = $this->getTranslator(NULL);
         if (!is_string($mode) || strlen($mode) != 1)
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Invalid mode'));
 
         if (!isset($this->_supported['CHANMODES']) ||
             !is_array($this->_supported['CHANMODES']))
-            throw new EErebotNotFound('No such mode');
+            throw new Erebot_NotFoundException('No such mode');
 
         $type = self::MODE_TYPE_A;
         foreach ($this->_supported['CHANMODES'] as &$modes) {
@@ -506,14 +506,14 @@ extends ErebotModuleBase
             $type++;
         }
         unset($modes);
-        throw new EErebotNotFound($translator->gettext('No such mode'));
+        throw new Erebot_NotFoundException($translator->gettext('No such mode'));
     }
 
     public function getMaxTargets($cmd)
     {
         if (!is_string($cmd)) {
             $translator = $this->getTranslator(NULL);
-            throw new EErebotInvalidValue($translator->gettext('Invalid command'));
+            throw new Erebot_InvalidValueException($translator->gettext('Invalid command'));
         }
 
         $cmd = strtoupper($cmd);
@@ -552,7 +552,7 @@ extends ErebotModuleBase
 
         if (!is_array($modes)) {
             $translator = $this->getTranslator(NULL);
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Invalid modes'));
         }
 
@@ -588,7 +588,7 @@ extends ErebotModuleBase
         }
 
         $translator = $this->getTranslator(NULL);
-        throw new EErebotNotFound($translator->gettext(
+        throw new Erebot_NotFoundException($translator->gettext(
             'No SSL information available'));
     }
 
@@ -596,7 +596,7 @@ extends ErebotModuleBase
     {
         $translator = $this->getTranslator(NULL);
         if (!is_string($prefix) || strlen($prefix) != 1)
-            throw new EErebotInvalidValue($translator->gettext('Bad prefix'));
+            throw new Erebot_InvalidValueException($translator->gettext('Bad prefix'));
 
         if (isset($this->_supported['IDCHAN'][$prefix]) &&
             ctype_digit($this->_supported['IDCHAN'][$prefix]))
@@ -606,7 +606,7 @@ extends ErebotModuleBase
             ctype_digit($this->_supported['CHIDLEN']))
             return (int) $this->_supported['CHIDLEN'];
 
-        throw new EErebotNotFound($translator->gettext(
+        throw new Erebot_NotFoundException($translator->gettext(
             'No safe channels on this server'));
     }
 
@@ -614,7 +614,7 @@ extends ErebotModuleBase
     {
         if (!is_string($standard)) {
             $translator = $this->getTranslator(NULL);
-            throw new EErebotInvalidValue($translator->gettext(
+            throw new Erebot_InvalidValueException($translator->gettext(
                 'Bad standard name'));
         }
 
@@ -649,7 +649,7 @@ extends ErebotModuleBase
         }
 
         $translator = $this->getTranslator(NULL);
-        throw new EErebotNotFound($translator->gettext(
+        throw new Erebot_NotFoundException($translator->gettext(
             'Extended bans not supported on this server'));
     }
 
@@ -661,7 +661,7 @@ extends ErebotModuleBase
         }
 
         $translator = $this->getTranslator(NULL);
-        throw new EErebotNotFound($translator->gettext(
+        throw new Erebot_NotFoundException($translator->gettext(
             'Extended bans not supported on this server'));
     }
 }
