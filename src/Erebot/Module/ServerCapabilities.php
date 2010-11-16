@@ -16,8 +16,8 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class   ErebotModule_ServerCapabilities
-extends ErebotModuleBase
+class   Erebot_Module_ServerCapabilities
+extends Erebot_Module_Base
 {
     const LIST_BANS         = 0;
     const LIST_SILENCES     = 1;
