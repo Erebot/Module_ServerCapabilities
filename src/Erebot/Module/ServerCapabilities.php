@@ -54,17 +54,23 @@ extends Erebot_Module_Base
         }
 
         if ($flags & self::RELOAD_HANDLERS) {
-            $handler = new Erebot_RawHandler(array($this, 'handleRaw'), RPL_ISUPPORT);
+            $handler = new Erebot_RawHandler(
+                array($this, 'handleRaw'),
+                Erebot_Interface_Event_Raw::RPL_ISUPPORT
+            );
             $this->_connection->addRawHandler($handler);
 
-            $handler = new Erebot_RawHandler(array($this, 'handleRaw'), RPL_MYINFO);
+            $handler = new Erebot_RawHandler(
+                array($this, 'handleRaw'),
+                Erebot_Interface_Event_Raw::RPL_MYINFO
+            );
             $this->_connection->addRawHandler($handler);
         }
     }
 
     public function handleRaw(Erebot_Event_Raw &$raw)
     {
-        if ($raw->getRaw() != RPL_ISUPPORT)
+        if ($raw->getRaw() != Erebot_Interface_Event_Raw::RPL_ISUPPORT)
             return;
 
         $tokens = explode(' ', $raw->getText());
