@@ -47,9 +47,18 @@ extends Erebot_Module_Base
             $this->_supported = array();
 
             self::$_caseMappings = array(
-                    'ascii'             => array_combine(range('a', 'z'), range('A', 'Z')),
-                    'strict-rfc1459'    => array_combine(range('a', chr(125)), range('A', chr(93))),
-                    'rfc1459'           => array_combine(range('a', chr(126)), range('A', chr(94)))
+                    'ascii' => array_combine(
+                        range('a', 'z'),
+                        range('A', 'Z')
+                    ),
+                    'strict-rfc1459' => array_combine(
+                        range('a', chr(125)),
+                        range('A', chr(93))
+                    ),
+                    'rfc1459' => array_combine(
+                        range('a', chr(126)),
+                        range('A', chr(94))
+                    ),
             );
         }
 
@@ -452,7 +461,8 @@ extends Erebot_Module_Base
     {
         $translator = $this->getTranslator(NULL);
         if (!is_string($mode) || strlen($mode) != 1)
-            throw new Erebot_InvalidValueException($translator->gettext('Invalid mode'));
+            throw new Erebot_InvalidValueException(
+                $translator->gettext('Invalid mode'));
 
         if (!isset($this->_supported['PREFIX']))
             throw new Erebot_NotFoundException($translator->gettext(
@@ -467,7 +477,8 @@ extends Erebot_Module_Base
                 return $matches[2][$pos];
         }
 
-        throw new Erebot_NotFoundException($translator->gettext('No such mode'));
+        throw new Erebot_NotFoundException(
+            $translator->gettext('No such mode'));
     }
 
     public function getChanModeForPrefix($prefix)
@@ -481,14 +492,19 @@ extends Erebot_Module_Base
             throw new Erebot_NotFoundException($translator->gettext(
                 'No mapping for prefixes'));
 
-        $ok = preg_match(self::PATTERN_PREFIX, $this->_supported['PREFIX'], $matches);
+        $ok = preg_match(
+            self::PATTERN_PREFIX,
+            $this->_supported['PREFIX'],
+            $matches
+        );
         if ($ok) {
             $pos = strpos($matches[2], $prefix);
             if ($pos !== FALSE && strlen($matches[1]) > $pos)
                 return $matches[1][$pos];
         }
 
-        throw new Erebot_NotFoundException($translator->gettext('No such prefix'));
+        throw new Erebot_NotFoundException(
+            $translator->gettext('No such prefix'));
     }
 
     public function qualifyChannelMode($mode)
@@ -512,14 +528,16 @@ extends Erebot_Module_Base
             $type++;
         }
         unset($modes);
-        throw new Erebot_NotFoundException($translator->gettext('No such mode'));
+        throw new Erebot_NotFoundException(
+            $translator->gettext('No such mode'));
     }
 
     public function getMaxTargets($cmd)
     {
         if (!is_string($cmd)) {
             $translator = $this->getTranslator(NULL);
-            throw new Erebot_InvalidValueException($translator->gettext('Invalid command'));
+            throw new Erebot_InvalidValueException(
+                $translator->gettext('Invalid command'));
         }
 
         $cmd = strtoupper($cmd);
@@ -602,7 +620,8 @@ extends Erebot_Module_Base
     {
         $translator = $this->getTranslator(NULL);
         if (!is_string($prefix) || strlen($prefix) != 1)
-            throw new Erebot_InvalidValueException($translator->gettext('Bad prefix'));
+            throw new Erebot_InvalidValueException(
+                $translator->gettext('Bad prefix'));
 
         if (isset($this->_supported['IDCHAN'][$prefix]) &&
             ctype_digit($this->_supported['IDCHAN'][$prefix]))
@@ -648,8 +667,8 @@ extends Erebot_Module_Base
 
     public function getExtendedBanPrefix()
     {
-        if (is_array($this->_supported['EXTBAN'])    &&
-            isset($this->_supported['EXTBAN'][0])    &&
+        if (is_array($this->_supported['EXTBAN']) &&
+            isset($this->_supported['EXTBAN'][0]) &&
             strlen($this->_supported['EXTBAN'][0]) == 1) {
             return $this->_supported['EXTBAN'][0];
         }
