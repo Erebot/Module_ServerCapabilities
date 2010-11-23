@@ -108,7 +108,7 @@ extends Erebot_Module_Base
             return array(strtoupper($name) => TRUE);
 
         $subs   = explode(',', $value);
-        if (count($subs) == 1) {
+        if (count($subs) == 1 && strpos($subs[0], ':') === FALSE) {
             $subs   = explode(';', $value);
             if (count($subs) == 1)
                 return array($name => $value);
@@ -124,7 +124,6 @@ extends Erebot_Module_Base
             list($key, $val) = explode(':', $sub);
             $res[$name][$key] = $val;
         }
-
         return $res;
     }
 
@@ -218,9 +217,15 @@ extends Erebot_Module_Base
         }
 
         $prefix     = $chan[0];
-        $allowed    =  (isset($this->_supported['CHANTYPES']) &&
-                        is_string($this->_supported['CHANTYPES'])) ?
-                        $this->_supported['CHANTYPES'] : '#&';
+        if (isset($this->_supported['CHANTYPES']) &&
+            is_string($this->_supported['CHANTYPES']))
+            $allowed = $this->_supported['CHANTYPES'];
+        else if (isset($this->_supported['CHANLIMIT']) &&
+                is_array($this->_supported['CHANLIMIT']) &&
+                count($this->_supported['CHANLIMIT']))
+            $allowed = implode('', array_keys($this->_supported['CHANLIMIT']));
+        else
+            $allowed = '#&';
         return (strpos($allowed, $prefix) !== FALSE);
     }
 
@@ -235,25 +240,27 @@ extends Erebot_Module_Base
             case self::LIST_BANS:
             case self::LIST_EXCEPTS:
             case self::LIST_INVITES:
-                if (isset($this->_supported['MAXBANS']) &&
+                $mode = $this->getChanListMode($list);
+                if (isset($this->_supported['MAXLIST'][$mode]) &&
+                    ctype_digit($this->_supported['MAXLIST'][$mode]))
+                    return (int) $this->_supported['MAXLIST'][$mode];
+                if ($list == self::LIST_BANS &&
+                    isset($this->_supported['MAXBANS']) &&
                     ctype_digit($this->_supported['MAXBANS']))
                     return (int) $this->_supported['MAXBANS'];
-                throw new Erebot_NotFoundException($translator->gettext(
-                    'No limit specified'));
+                return NULL;
 
             case self::LIST_SILENCES:
                 if (isset($this->_supported['SILENCE']) &&
                     ctype_digit($this->_supported['SILENCE']))
                     return (int) $this->_supported['SILENCE'];
-                throw new Erebot_NotFoundException($translator->gettext(
-                    'No silence limit specified'));
+                return NULL;
 
             case self::LIST_WATCHES:
                 if (isset($this->_supported['WATCH']) &&
                     ctype_digit($this->_supported['WATCH']))
                     return (int) $this->_supported['WATCH'];
-                throw new Erebot_NotFoundException($translator->gettext(
-                    'No watch limit specified'));
+                return NULL;
 
             default:
                 throw new Erebot_InvalidValueException($translator->gettext(
@@ -263,13 +270,11 @@ extends Erebot_Module_Base
 
     public function getChanLimit($chanPrefix)
     {
-        if (!is_string($chanPrefix)) {
-            $translator = $this->getTranslator(NULL);
-            throw new Erebot_InvalidValueException($translator->gettext(
-                'Bad chan prefix'));
-        }
+        if (!$this->isChannel($chanPrefix))
+            return -1;
 
-        if (isset($this->_supported['CHANLIMIT'])) {
+        if (isset($this->_supported['CHANLIMIT']) &&
+            is_array($this->_supported['CHANLIMIT'])) {
             foreach ($this->_supported['CHANLIMIT'] as $prefixes => $limit) {
                 if (strpos($prefixes, $chanPrefix) !== FALSE) {
                     if ($limit == '')
@@ -420,7 +425,7 @@ extends Erebot_Module_Base
         return '';
     }
 
-    public function getChannelListMode($list)
+    public function getChanListMode($list)
     {
         $translator = $this->getTranslator(NULL);
         if (!is_int($list))
