@@ -17,18 +17,11 @@
 */
 
 
-if (!defined('__DIR__')) {
-  class __FILE_CLASS__ {
-    function  __toString() {
-      $X = debug_backtrace();
-      return dirname($X[1]['file']);
-    }
-  }
-  define('__DIR__', new __FILE_CLASS__);
-} 
-
-include_once(__DIR__.'/../../../../autoloader.php');
-include_once(__DIR__.'/testenv/bootstrap.php');
+require_once(
+    dirname(__FILE__) .
+    DIRECTORY_SEPARATOR . 'testenv' .
+    DIRECTORY_SEPARATOR . 'bootstrap.php'
+);
 
 class   ServerCapabilitiesTest
 extends ErebotModuleTestCase
