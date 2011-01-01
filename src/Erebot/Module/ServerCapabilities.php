@@ -38,28 +38,12 @@ extends Erebot_Module_Base
 
     const PATTERN_PREFIX    = '/^\\(([^\\)]+)\\)(.*)$/';
 
-    static protected    $_caseMappings;
     protected           $_supported;
 
     public function reload($flags)
     {
         if ($flags & self::RELOAD_MEMBERS) {
             $this->_supported = array();
-
-            self::$_caseMappings = array(
-                    'ascii' => array_combine(
-                        range('a', 'z'),
-                        range('A', 'Z')
-                    ),
-                    'strict-rfc1459' => array_combine(
-                        range('a', chr(125)),
-                        range('A', chr(93))
-                    ),
-                    'rfc1459' => array_combine(
-                        range('a', chr(126)),
-                        range('A', chr(94))
-                    ),
-            );
         }
 
         if ($flags & self::RELOAD_HANDLERS) {
@@ -210,7 +194,7 @@ extends Erebot_Module_Base
 
     public function isChannel($chan)
     {
-        if (!is_string($chan) || strlen($chan) < 1) {
+        if (!is_string($chan) || !strlen($chan)) {
             $translator = $this->getTranslator(NULL);
             throw new Erebot_InvalidValueException($translator->gettext(
                 'Bad channel name'));
@@ -347,65 +331,6 @@ extends Erebot_Module_Base
         return 'rfc1459';
     }
 
-    protected function cmp($a, $b, $mapping, $len)
-    {
-        if ($mapping !== NULL) {
-            $a = strtr($a, $mapping);
-            $b = strtr($b, $mapping);
-        }
-
-        if ($len == -1)
-            return strcmp($a, $b);
-        return strncmp($a, $b, $len);
-    }
-
-    public function irccmp($a, $b)
-    {
-        return $this->cmp($a, $b, NULL, -1);
-    }
-
-    public function ircncmp($a, $b, $len)
-    {
-        return $this->cmp($a, $b, NULL, $len);
-    }
-
-    public function irccasecmp($a, $b, $mappingName = NULL)
-    {
-        $translator = $this->getTranslator(NULL);
-        if ($mappingName === NULL)
-            $mappingName = $this->getCaseMapping();
-
-        if (!is_string($mappingName))
-            throw new Erebot_InvalidValueException($translator->gettext(
-                'Invalid mapping name'));
-
-        $mappingName = strtolower($mappingName);
-        if (!isset(self::$_caseMappings[$mappingName]))
-            throw new Erebot_NotFoundException($translator->gettext(
-                'No such mapping exists'));
-        $mapping = self::$_caseMappings[$mappingName];
-
-        return $this->cmp($a, $b, $mapping, -1);
-    }
-
-    public function ircncasecmp($a, $b, $len, $mappingName = NULL)
-    {
-        $translator = $this->getTranslator(NULL);
-        if ($mappingName === NULL)
-            $mappingName = $this->getCaseMapping();
-
-        if (!is_string($mappingName))
-            throw new Erebot_InvalidValueException($translator->gettext(
-                'Invalid mapping name'));
-
-        $mappingName = strtolower($mappingName);
-        if (!isset(self::$_caseMappings[$mappingName]))
-            throw new Erebot_NotFoundException($translator->gettext(
-                'No such mapping exists'));
-        $mapping = self::$_caseMappings[$mappingName];
-
-        return $this->cmp($a, $b, $mapping, $len);
-    }
 
     public function getCharset()
     {
