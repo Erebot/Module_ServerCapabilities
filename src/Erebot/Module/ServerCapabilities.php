@@ -215,7 +215,7 @@ extends Erebot_Module_Base
         // Restricted characters in channel names,
         // as per RFC 2811 - (2.1) Namespace.
         foreach (array(' ', ',', "\x07", ':') as $token)
-            if (strpos($token, $target) !== FALSE)
+            if (strpos($token, $chan) !== FALSE)
                 return FALSE;
 
         if (strlen($chan) > 50)
