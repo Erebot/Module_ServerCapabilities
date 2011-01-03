@@ -209,7 +209,18 @@ extends Erebot_Module_Base
                 count($this->_supported['CHANLIMIT']))
             $allowed = implode('', array_keys($this->_supported['CHANLIMIT']));
         else
-            $allowed = '#&';
+            // As per RFC 2811 - (2.1) Namespace
+            $allowed = '#&+!';
+
+        // Restricted characters in channel names,
+        // as per RFC 2811 - (2.1) Namespace.
+        foreach (array(' ', ',', "\x07", ':') as $token)
+            if (strpos($token, $target) !== FALSE)
+                return FALSE;
+
+        if (strlen($chan) > 50)
+            return FALSE;
+
         return (strpos($allowed, $prefix) !== FALSE);
     }
 
