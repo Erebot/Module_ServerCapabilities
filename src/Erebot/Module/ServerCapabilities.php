@@ -36,12 +36,21 @@ extends Erebot_Module_Base
     const MODE_TYPE_C       = 2;
     const MODE_TYPE_D       = 3;
 
+    const ELIST_MASK        = 'M';
+    const ELIST_NEG_MASK    = 'N';
+    const ELIST_USERS       = 'U';
+    const ELIST_CREATION    = 'C';
+    const ELIST_TOPIC       = 'T';
+
     const PATTERN_PREFIX    = '/^\\(([^\\)]+)\\)(.*)$/';
 
     protected           $_supported;
 
     public function reload($flags)
     {
+        if ($this->_channel !== NULL)
+            return;
+
         if ($flags & self::RELOAD_MEMBERS) {
             $this->_supported = array();
         }
@@ -71,15 +80,25 @@ extends Erebot_Module_Base
             if (substr($token, 0, 1) == ':')
                 break;
 
-            $supported          = $this->parseToken($token);
-            if (isset($supported['NAMESX']))
-                $this->sendCommand('PROTOCTL NAMESX');
+            $supported          = $this->_parseToken($token);
             $this->_supported = array_merge($this->_supported, $supported);
         }
         unset($token);
+
+        $event = new Erebot_Event_ServerCapabilities(
+            $raw->getConnection(),
+            $this
+        );
+        $this->_connection->dispatchEvent($event);
+
+# @TODO Move this to the ChanTracker module.
+#        if ($this->hasExtendedNames())
+#            $this->sendCommand('PROTOCTL NAMESX');
+#        if ($this->hasUserHostNames())
+#            $this->sendCommand('PROTOCTL UHNAMES');
     }
 
-    protected function parseToken(&$token)
+    protected function _parseToken($token)
     {
         $pos = strpos($token, '=');
         if ($pos === FALSE)
@@ -92,10 +111,17 @@ extends Erebot_Module_Base
             return array(strtoupper($name) => TRUE);
 
         $subs   = explode(',', $value);
-        if (count($subs) == 1 && strpos($subs[0], ':') === FALSE) {
-            $subs   = explode(';', $value);
-            if (count($subs) == 1)
-                return array($name => $value);
+        if (count($subs) == 1) {
+            $colonPos       = strpos($subs[0], ':');
+            $semicolonPos   = strpos(trim($subs[0], ';'), ';');
+            if ($colonPos === FALSE) {
+                $subs   = explode(';', $value);
+                if (count($subs) == 1)
+                    return array($name => $value);
+            }
+            else if ($semicolonPos !== FALSE && $semicolonPos > $colonPos) {
+                $subs = explode(';', trim($subs[0], ';'));
+            }
         }
 
         $res = array();
@@ -111,14 +137,69 @@ extends Erebot_Module_Base
         return $res;
     }
 
-    public function hasExtendedList()
+    /**
+     * Whether the server supports extensions for the LIST
+     * command or not.
+     * Extended LIST allows one to search channels not only
+     * by their name but also using other criteria such as
+     * their topic, creation time, user count, etc.
+     *
+     * \param opaque $extension
+     *      The extension for which support must be tested.
+     *      Use the Erebot_Module_ServerCapabilities::ELIST_*
+     *      series of constant for this parameter.
+     *
+     * \retval bool
+     *      TRUE if the given $extension is supported,
+     *      FALSE otherwise.
+     */
+    public function hasListExtension($extension)
     {
-        return isset($this->_supported['ELIST']);
+        if (!isset($this->_supported['ELIST']))
+            return FALSE;
+        if (!is_string($extension) || strlen($extension) != 1)
+            return FALSE;
+        return (strpos($this->_supported['ELIST'], $extension) !== FALSE);
     }
 
+    /**
+     * Whether extended names are supported by this server.
+     * Extended names make it possible to retrieve all modes
+     * set for a particular user on a channel using the
+     * /NAMES command.
+     * This extension is disabled by default and must be
+     * explicitly enabled by sending a "PROTOCTL NAMESX"
+     * message to the server.
+     * When this extension is disabled, the server will only
+     * send the highest mode of each user in reply to /NAMES.
+     *
+     * \retval bool
+     *      TRUE if the server supports the NAMESX extension,
+     *      FALSE otherwise.
+     */
     public function hasExtendedNames()
     {
         return isset($this->_supported['NAMESX']);
+    }
+
+    /**
+     * Whether the server can send full the user!ident@host
+     * in a reply to a NAMES command. This makes it possible
+     * to build an internal list of addresses without requiring
+     * an extra /WHO or /WHOIS command.
+     * This extension is disabled by default and must be
+     * explicitly enabled by sending a "PROTOCTL UHNAMES"
+     * message to the server.
+     * When this extension is disabled, the server will only
+     * send the user's nickname in reply to /NAMES.
+     *
+     * \retval bool
+     *      TRUE if the server supports the UHNAMES extension,
+     *      FALSE otherwise.
+     */
+    public function hasUserHostNames()
+    {
+        return isset($this->_supported['UHNAMES']);
     }
 
     public function hasExtraPenalty()
@@ -131,11 +212,53 @@ extends Erebot_Module_Base
         return isset($this->_supported['FNC']);
     }
 
+    /**
+     * Whether the server supports the Hybrid Connect Notice
+     * extension. This extension is aimed at IRC operators
+     * and (more likely) IRC services.
+     * The Hybrid Connect Notice (HCN) slightly changes the
+     * format used by connection notices so that it matches
+     * the format expected by the Blitzed Open Proxy Monitor
+     * (http://wiki.blitzed.org/BOPM). This includes displaying
+     * the user's IP address in connect/exit notices. 
+     *
+     * \retval bool
+     *      TRUE if the server supports the HCN extension,
+     *      FALSE otherwise.
+     */
     public function hasHybridConnectNotice()
     {
         return isset($this->_supported['HCN']);
     }
 
+    /**
+     * Indicates whether a particular command is supported
+     * or not.
+     *
+     * \param string $cmdName
+     *      Name of the command whose support must be tested.
+     *
+     * \retval bool
+     *      TRUE if the given command is supported,
+     *      FALSE otherwise.
+     *
+     * \throw Erebot_InvalidValueException
+     *      The given $cmdName is not a valid command name.
+     *
+     * \note
+     *      This method only exists to test support for
+     *      commands which are not yet widely recognized
+     *      by IRC clients. Basic commands such as those
+     *      described in RFC 1459 and its successors need
+     *      not be tested (this method will indeed return
+     *      FALSE for such commands).
+     *
+     * \note
+     *      Many commands actually have separate methods
+     *      to check for their support. This is a limitation
+     *      of the current implementation. Those methods will
+     *      probably be merged in hasCommand() later on.
+     */
     public function hasCommand($cmdName)
     {
         if (!is_string($cmdName)) {
@@ -164,6 +287,16 @@ extends Erebot_Module_Base
         return isset($this->_supported['SECURELIST']);
     }
 
+    /**
+     * Whether the server supports the STARTTLS command.
+     * This is only an indication so that clients using
+     * a plain-text connection may choose to disconnect
+     * and reconnect using a TLS encrypted connection.
+     *
+     * \retval bool
+     *      TRUE if the server support TLS encrypted
+     *      connections, FALSE otherwise.
+     */
     public function hasStartTLS()
     {
         return isset($this->_supported['STARTTLS']);
@@ -192,6 +325,22 @@ extends Erebot_Module_Base
         return FALSE;
     }
 
+    /**
+     * Checks whether a given string contains a valid channel name.
+     *
+     * \param string $chan
+     *      Potentiel channel name to test.
+     *
+     * \retval bool
+     *      TRUE if the given $chan can be used as a channel name,
+     *      FALSE otherwise.
+     *
+     * \note
+     *      This method uses very basic checks to test validity
+     *      of the $chan as a channel name. Therefore, a server
+     *      may reject a channel name which was recognized as
+     *      being valid by this method.
+     */
     public function isChannel($chan)
     {
         if (!is_string($chan) || !strlen($chan)) {
@@ -334,6 +483,15 @@ extends Erebot_Module_Base
             'No limit defined for this text'));
     }
 
+    /**
+     * Returns the name of the case mapping currently
+     * used by the server.
+     *
+     * \retval string
+     *      The mapping in use. If this information is not
+     *      available, this method assumes the mapping
+     *      defined in RFC 1459 ("rfc1459") is used.
+     */
     public function getCaseMapping()
     {
         if (isset($this->_supported['CASEMAPPING']) &&
@@ -342,7 +500,15 @@ extends Erebot_Module_Base
         return 'rfc1459';
     }
 
-
+    /**
+     * Returns the charset used by this IRC server.
+     *
+     * \retval string
+     *      The server's charset.
+     *
+     * \throw Erebot_NotFoundException
+     *      The server did not declare its charset.
+     */
     public function getCharset()
     {
         if (isset($this->_supported['CHARSET']) &&
@@ -353,12 +519,28 @@ extends Erebot_Module_Base
             'No charset specified'));
     }
 
+    /**
+     * The IRC network this server belongs to.
+     *
+     * \retval string
+     *      Name of the IRC network this server belongs to.
+     *
+     * \throw Erebot_NotFoundException
+     *      The server did not declare itself as being part
+     *      of any specific IRC network.
+     *
+     * \warning
+     *      The name return by this method is purely informative.
+     *      The server is free to send any name it chooses.
+     *      Don't rely on this to implement security checks!
+     */
     public function getNetworkName()
     {
         if (isset($this->_supported['NETWORK']) &&
             is_string($this->_supported['NETWORK']))
             return $this->_supported['NETWORK'];
-        return '';
+        throw new Erebot_NotFoundException($translator->gettext(
+            'No network declared'));
     }
 
     public function getChanListMode($list)
@@ -540,19 +722,54 @@ extends Erebot_Module_Base
         return 12;
     }
 
+    /**
+     * Indicates whether this server support SSL connections.
+     *
+     * \retval dict
+     *      An associative array whose keys are the IP addresses
+     *      and whose values are the port where SSL support is
+     *      enabled.
+     *
+     * \throw Erebot_InvalidValueException
+     *      The data received from the IRC server was invalid.
+     *
+     * \throw Erebot_NotFoundException
+     *      No information could be retrieved indicating whether
+     *      this IRC server supports SSL connections or not.
+     *
+     * \note
+     *      When SSL is supported on all IPs for a given port,
+     *      the IP (the key) is defined as "*".
+     */
     public function getSSL()
     {
+        $translator = $this->getTranslator(NULL);
         if (isset($this->_supported['SSL'])) {
+            // Received "SSL=", so assume no SSL support.
+            if ($this->_supported['SSL'] === TRUE)
+                return array();
+
             if (is_string($this->_supported['SSL'])) {
                 list($key, $val) = explode(':', $this->_supported['SSL']);
-                return array($key => $val);
+                $ssl = array($key => $val);
             }
+            else if (is_array($this->_supported['SSL']))
+                $ssl = $this->_supported['SSL'];
+            else
+                throw new Erebot_InvalidValueException(
+                    $translator->gettext('Invalid data received'));;
 
-            if (is_array($this->_supported['SSL']))
-                return $this->_supported['SSL'];
+            $result = array();
+            foreach ($ssl as $ip => $val) {
+                $port = (int) $val;
+                if (!ctype_digit($val) || $port <= 0 || $port > 65535)
+                    throw new Erebot_InvalidValueException(
+                        $translator->gettext('Not a valid port'));;
+                $result[$ip] = $port;
+            }
+            return $result;
         }
 
-        $translator = $this->getTranslator(NULL);
         throw new Erebot_NotFoundException($translator->gettext(
             'No SSL information available'));
     }

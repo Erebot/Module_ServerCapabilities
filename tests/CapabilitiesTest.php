@@ -53,7 +53,15 @@ extends ErebotModuleTestCase
             'AWAYLEN=307 MAXTARGETS=20 :are supported by this server'
         );
         $this->_module->handleRaw($raw);
-        $this->assertEquals(FALSE, $this->_module->hasExtendedList());
+        $listExtensions = array(
+            Erebot_Module_ServerCapabilities::ELIST_MASK,
+            Erebot_Module_ServerCapabilities::ELIST_NEG_MASK,
+            Erebot_Module_ServerCapabilities::ELIST_USERS,
+            Erebot_Module_ServerCapabilities::ELIST_CREATION,
+            Erebot_Module_ServerCapabilities::ELIST_TOPIC,
+        );
+        foreach ($listExtensions as $ext)
+            $this->assertEquals(FALSE, $this->_module->hasListExtension($ext));
         $this->assertEquals(TRUE, $this->_module->hasExtendedNames());
         $this->assertEquals(FALSE, $this->_module->hasExtraPenalty());
         $this->assertEquals(FALSE, $this->_module->hasForcedNickChange());
@@ -89,6 +97,65 @@ extends ErebotModuleTestCase
         $this->assertEquals(20, $this->_module->getChanLimit('#foo'));
         $this->assertEquals(-1, $this->_module->getChanLimit('&foo'));
         $this->assertEquals(-1, $this->_module->getChanLimit('!foo'));
+    }
+
+    /**
+     * @expectedException Erebot_NotFoundException
+     */
+    public function testSSL1()
+    {
+        $raw = new Erebot_Event_Raw(
+            $this->_connection,
+            Erebot_Interface_Event_Raw::RPL_ISUPPORT,
+            'source', 'target',
+            ''
+        );
+        $this->_module->handleRaw($raw);
+        $this->_module->getSSL();
+    }
+
+    public function testSSL2()
+    {
+        $raw = new Erebot_Event_Raw(
+            $this->_connection,
+            Erebot_Interface_Event_Raw::RPL_ISUPPORT,
+            'source', 'target',
+            'SSL='
+        );
+        $this->_module->handleRaw($raw);
+        $this->assertEquals(array(), $this->_module->getSSL());
+    }
+
+    public function testSSL3()
+    {
+        $raw = new Erebot_Event_Raw(
+            $this->_connection,
+            Erebot_Interface_Event_Raw::RPL_ISUPPORT,
+            'source', 'target',
+            'SSL=127.0.0.1:7002'
+        );
+        $this->_module->handleRaw($raw);
+        $this->assertEquals(
+            array('127.0.0.1' => 7002),
+            $this->_module->getSSL()
+        );
+    }
+
+    public function testSSL4()
+    {
+        $raw = new Erebot_Event_Raw(
+            $this->_connection,
+            Erebot_Interface_Event_Raw::RPL_ISUPPORT,
+            'source', 'target',
+            'SSL=1.2.3.4:6668;4.3.2.1:6669;*:6660;'
+        );
+        $this->_module->handleRaw($raw);
+        $expected = array(
+            '1.2.3.4'   => 6668,
+            '4.3.2.1'   => 6669,
+            '*'         => 6660,
+        );
+        $this->assertEquals($expected, $this->_module->getSSL());
     }
 }
 
