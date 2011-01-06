@@ -44,15 +44,17 @@ extends Erebot_Module_Base
 
     const PATTERN_PREFIX    = '/^\\(([^\\)]+)\\)(.*)$/';
 
-    protected           $_supported;
+    protected   $_supported;
+    protected   $_parsed;
 
     public function reload($flags)
     {
         if ($this->_channel !== NULL)
             return;
 
-        if ($flags & self::RELOAD_MEMBERS) {
-            $this->_supported = array();
+        if ($flags & self::RELOAD_INIT) {
+            $this->_supported   = array();
+            $this->_parsed      = FALSE;
         }
 
         if ($flags & self::RELOAD_HANDLERS) {
@@ -64,15 +66,26 @@ extends Erebot_Module_Base
 
             $handler = new Erebot_RawHandler(
                 array($this, 'handleRaw'),
-                Erebot_Interface_Event_Raw::RPL_MYINFO
+                Erebot_Interface_Event_Raw::RPL_LUSERCLIENT
             );
             $this->_connection->addRawHandler($handler);
         }
     }
 
-    public function handleRaw(Erebot_Event_Raw &$raw)
+    public function handleRaw(Erebot_Event_Raw $raw)
     {
-        if ($raw->getRaw() != Erebot_Interface_Event_Raw::RPL_ISUPPORT)
+        $rawCode = $raw->getRaw();
+        if ($rawCode == Erebot_Interface_Event_Raw::RPL_LUSERCLIENT && !$this->_parsed) {
+            $this->_parsed = TRUE;
+            $event = new Erebot_Event_ServerCapabilities(
+                $this->_connection,
+                $this
+            );
+            $this->_connection->dispatchEvent($event);
+            return;
+        }
+
+        if ($rawCode != Erebot_Interface_Event_Raw::RPL_ISUPPORT)
             return;
 
         $tokens = explode(' ', $raw->getText());
@@ -84,18 +97,6 @@ extends Erebot_Module_Base
             $this->_supported = array_merge($this->_supported, $supported);
         }
         unset($token);
-
-        $event = new Erebot_Event_ServerCapabilities(
-            $raw->getConnection(),
-            $this
-        );
-        $this->_connection->dispatchEvent($event);
-
-# @TODO Move this to the ChanTracker module.
-#        if ($this->hasExtendedNames())
-#            $this->sendCommand('PROTOCTL NAMESX');
-#        if ($this->hasUserHostNames())
-#            $this->sendCommand('PROTOCTL UHNAMES');
     }
 
     protected function _parseToken($token)
