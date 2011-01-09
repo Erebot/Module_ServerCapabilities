@@ -589,8 +589,10 @@ extends Erebot_Module_Base
                 $translator->gettext('Invalid mode'));
 
         if (!isset($this->_supported['PREFIX']))
-            throw new Erebot_NotFoundException($translator->gettext(
-                'No mapping for prefixes'));
+            // Default prefixes based on RFC 1459.
+            $prefixes = '(ov)@+';
+        else
+            $prefixes = $this->_supported['PREFIX'];
 
         $ok = preg_match(self::PATTERN_PREFIX,
             $this->_supported['PREFIX'], $matches);
@@ -613,8 +615,10 @@ extends Erebot_Module_Base
                 'Invalid prefix'));
 
         if (!isset($this->_supported['PREFIX']))
-            throw new Erebot_NotFoundException($translator->gettext(
-                'No mapping for prefixes'));
+            // Default prefixes based on RFC 1459.
+            $prefixes = '(ov)@+';
+        else
+            $prefixes = $this->_supported['PREFIX'];
 
         $ok = preg_match(
             self::PATTERN_PREFIX,
