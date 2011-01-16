@@ -16,6 +16,9 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * This module can determine what a server is capable of.
+ */
 class   Erebot_Module_ServerCapabilities
 extends Erebot_Module_Base
 {
@@ -203,11 +206,29 @@ extends Erebot_Module_Base
         return isset($this->_supported['UHNAMES']);
     }
 
+    /**
+     * Indicates whether the server gives extra penalty
+     * to some commands instead of the normal 2 seconds
+     * per message and 1 second for every 120 bytes in
+     * a message.
+     *
+     * \retval bool
+     *      TRUE if the server gives extra penalty for
+     *      certain commands, FALSE otherwise.
+     */
     public function hasExtraPenalty()
     {
         return isset($this->_supported['PENALTY']);
     }
 
+    /**
+     * Indicates whether the server may change the bot's
+     * nickname on its own.
+     *
+     * \retval bool
+     *      TRUE if the server may choose to change a user's
+     *      nickname at its own discretion, FALSE otherwise.
+     */
     public function hasForcedNickChange()
     {
         return isset($this->_supported['FNC']);
@@ -278,11 +299,30 @@ extends Erebot_Module_Base
         return FALSE;
     }
 
+    /**
+     * Indicates whether replies to a LIST command
+     * will be sent in multiple iterations to avoid
+     * the send queue to overflow.
+     *
+     * \retval bool
+     *      TRUE if replies to LIST commands may be
+     *      split in several messages, FALSE otherwise.
+     */
     public function hasSafeList()
     {
         return isset($this->_supported['SAFELIST']);
     }
 
+    /**
+     * Indicates whether the server may deny requests
+     * to send channel lists until the bot has been
+     * connected for long enough.
+     *
+     * \retval bool
+     *      TRUE if the server may deny access to channel
+     *      lists until a certain amount of time has been
+     *      spent connected, FALSE otherwise.
+     */
     public function hasSecureList()
     {
         return isset($this->_supported['SECURELIST']);
@@ -303,6 +343,28 @@ extends Erebot_Module_Base
         return isset($this->_supported['STARTTLS']);
     }
 
+    /**
+     * Indicates whether a message can be sent in a channel
+     * so that only users with a specific status will receive it.
+     *
+     * \param string $status
+     *      A status prefix for which this ability must be tested.
+     *
+     * \retval bool
+     *      Indicates that the given status prefix
+     *
+     * \note
+     *      Nowadays, most IRC servers support at least this
+     *      features for the '+', '%' & '@' status prefixes,
+     *      meant to send messages to voices only, halfops
+     *      only & operators only (respectively).
+     *
+     * \note
+     *      Depending on the IRC server, the exact command to use
+     *      to send messages to users with a specific status may
+     *      vary. In particular, on some servers you'll need to
+     *      use dedicated commands, like WALLCHOPS or WALLVOICES.
+     */
     public function hasStatusMsg($status)
     {
         if (!is_string($status) || strlen($status) != 1) {
@@ -330,7 +392,7 @@ extends Erebot_Module_Base
      * Checks whether a given string contains a valid channel name.
      *
      * \param string $chan
-     *      Potentiel channel name to test.
+     *      Potential channel name to test.
      *
      * \retval bool
      *      TRUE if the given $chan can be used as a channel name,
@@ -374,6 +436,34 @@ extends Erebot_Module_Base
         return (strpos($allowed, $prefix) !== FALSE);
     }
 
+    /**
+     * Returns the maximum number of entries a list may contain.
+     *
+     * \param opaque $list
+     *      One of the LIST_* constants, representing the type
+     *      of list for which this information must be retrieved.
+     *
+     * \retval mixed
+     *      Returns the number of entries this type of list may
+     *      contain or NULL if no maximum has been defined.
+     *
+     * \throw Erebot_InvalidValueException
+     *      The value passed to $list does not represent a valid
+     *      list type.
+     *
+     * \note
+     *      Even if the server does not specify a maximum number
+     *      of entries for some list, you should <b>always</b>
+     *      assume that the server has an implicit value for it,
+     *      which is usually not that high (like 30 entries or so).
+     *
+     * \note
+     *      On some servers, several lists are managed together
+     *      hence the value returned by this method represents
+     *      the maximum number of entries these shared lists
+     *      may occupy and not the individual capacity of these
+     *      lists.
+     */
     public function getMaxListSize($list)
     {
         $translator = $this->getTranslator(NULL);
@@ -413,10 +503,32 @@ extends Erebot_Module_Base
         }
     }
 
+    /**
+     * Returns the maximum number of channels of a given type
+     * that you may join simultaneously.
+     *
+     * \param string $chanPrefix
+     *      The type of channel to query, given by its prefix
+     *      (eg. "#" or "&").
+     *
+     * \retval int
+     *      The number of channels of this type that you may
+     *      be on simultaneously or -1 if there is no such
+     *      limit.
+     *
+     * \throw Erebot_InvalidValueException
+     *      The given $chanPrefix does not refer to a valid
+     *      channel type.
+     *
+     * \note
+     *      Even if this method returns -1 for a given type,
+     *      you should <b>always</b> assume that the server
+     *      uses an implicit limit (sometimes as low as 10).
+     */
     public function getChanLimit($chanPrefix)
     {
         if (!$this->isChannel($chanPrefix))
-            return -1;
+            throw new Erebot_InvalidValueException('Invalid prefix');
 
         if (isset($this->_supported['CHANLIMIT']) &&
             is_array($this->_supported['CHANLIMIT'])) {
@@ -437,6 +549,30 @@ extends Erebot_Module_Base
         return -1;
     }
 
+    /**
+     * Returns the maximum size messages/entities of a given type
+     * may occupy.
+     *
+     * \param opaque $type
+     *      The type of message/entity to test, expressed using one
+     *      of the TEXT_* constants of this class.
+     *
+     * \retval int
+     *      The maximum size for a message/entity of type $type
+     *      or -1 if there is no limit (or the limit is unknown).
+     *
+     * \throw Erebot_InvalidValueException
+     *      The given $type does not refer to a valid
+     *      type of message/entity.
+     *
+     * \note
+     *      Even if this method returns -1, you should
+     *      <b>always</b> assume that an implicit limit
+     *      exists (whose value still depends on the type).
+     *      For example, the original Request for Comments
+     *      on IRC (RFC 1459) specifies that nicknames
+     *      may not exceed 9 characters in length.
+     */
     public function getMaxTextLen($type)
     {
         $translator = $this->getTranslator(NULL);
@@ -480,8 +616,7 @@ extends Erebot_Module_Base
                 throw new Erebot_InvalidValueException($translator->gettext(
                     'Invalid text type'));
         }
-        throw new Erebot_NotFoundException($translator->gettext(
-            'No limit defined for this text'));
+        return -1;
     }
 
     /**
@@ -544,6 +679,25 @@ extends Erebot_Module_Base
             'No network declared'));
     }
 
+    /**
+     * Returns the channel mode to use to retrieve
+     * the content of a channel list of a certain type.
+     *
+     * \param opaque $list
+     *      The type of list to query, expressed using
+     *      one of the LIST_* constants of this class.
+     *
+     * \retval string
+     *      The channel mode to query to retrieve the
+     *      content of the list represented by $list.
+     *
+     * \throw Erebot_InvalidValueException
+     *      There is no such type of list.
+     *
+     * \throw Erebot_NotFoundException
+     *      The given type of list is not available
+     *      on that particular IRC server.
+     */
     public function getChanListMode($list)
     {
         $translator = $this->getTranslator(NULL);
@@ -581,6 +735,28 @@ extends Erebot_Module_Base
         }
     }
 
+    /**
+     * Returns the prefix associated with a given
+     * channel mode representing a specific status
+     * (eg. '+' for voices [v] and '@' for operators [o]).
+     *
+     * \param string $mode
+     *      The channel mode for which the corresponding
+     *      prefix must be returned.
+     *
+     * \retval string
+     *      The prefix corresponding to that mode.
+     *
+     * \throw Erebot_InvalidValueException
+     *      The given $mode is not valid.
+     *
+     * \throw Erebot_NotFoundException
+     *      The given $mode does not refer to a channel status.
+     *
+     * \see
+     *      Erebot_Module_ServerCapabilities::getChanModeForPrefix()
+     *      does the opposite translation.
+     */
     public function getChanPrefixForMode($mode)
     {
         $translator = $this->getTranslator(NULL);
@@ -607,6 +783,27 @@ extends Erebot_Module_Base
             $translator->gettext('No such mode'));
     }
 
+    /**
+     * Returns the channel mode associated with a given prefix
+     * (eg. 'v' for voices [+] and 'o' for operators [@]).
+     *
+     * \param string $prefix
+     *      The prefix for which the corresponding
+     *      channel mode must be returned.
+     *
+     * \retval string
+     *      The mode corresponding to that prefix.
+     *
+     * \throw Erebot_InvalidValueException
+     *      The given $prefix is not valid.
+     *
+     * \throw Erebot_NotFoundException
+     *      The given $prefix does not refer to a channel status.
+     *
+     * \see
+     *      Erebot_Module_ServerCapabilities::getChanPrefixForMode()
+     *      does the opposite translation.
+     */
     public function getChanModeForPrefix($prefix)
     {
         $translator = $this->getTranslator(NULL);
@@ -635,6 +832,25 @@ extends Erebot_Module_Base
             $translator->gettext('No such prefix'));
     }
 
+    /**
+     * Returns the type of mode a given channel mode belongs to,
+     * using the classification method defined in RFC 1459.
+     *
+     * \param string $mode
+     *      The channel mode to qualify.
+     *
+     * \retval opaque
+     *      One of the MODE_TYPE_* constants defined
+     *      in this class, indicating whether the given
+     *      $mode is of type A, B, C or D.
+     *
+     * \throw Erebot_InvalidValueException
+     *      The given parameter does not refer to a valid
+     *      channel mode.
+     *
+     * \throw Erebot_NotFoundException
+     *      The given $mode does not exist on this IRC server.
+     */
     public function qualifyChannelMode($mode)
     {
         $translator = $this->getTranslator(NULL);
@@ -660,6 +876,32 @@ extends Erebot_Module_Base
             $translator->gettext('No such mode'));
     }
 
+    /**
+     * Returns the maximum number of targets (nickname or channel)
+     * a given command may accept.
+     *
+     * \param string $cmd
+     *      The command to query.
+     *
+     * \retval int
+     *      The maximum number of targets for that command
+     *      or -1 if there is no limit or it is unknown.
+     *
+     * \throw Erebot_InvalidValueException
+     *      $cmd does not refer to a valid IRC command.
+     *
+     * \note
+     *      Even if this method returns -1, you should <b>always</b>
+     *      assumre that the IRC server uses an implicit limit.
+     *
+     * \note
+     *      Even if the server accepts a large number of simultaneous
+     *      targets, the maximum size of the command must still comply
+     *      with other limits defined by the server and the various
+     *      standards (eg. RFC 1459 imposes a maximum length of 1024
+     *      bytes for every message sent, including the trailing CR LF
+     *      sequence).
+     */
     public function getMaxTargets($cmd)
     {
         if (!is_string($cmd)) {
@@ -684,6 +926,18 @@ extends Erebot_Module_Base
         return -1;
     }
 
+    /**
+     * Returns the maximum number of channel modes that may be
+     * changed at once.
+     *
+     * \retval int
+     *      The maximum number of channel modes of any type
+     *      that can be changed at once.
+     *
+     * \note
+     *      For historical reasons, a value of 3 is assumed
+     *      for IRC servers that do not specify a limit.
+     */
     public function getMaxVariableModes()
     {
         if (isset($this->_supported['MODES'])) {
@@ -697,28 +951,19 @@ extends Erebot_Module_Base
         return 3;
     }
 
-    public function getMaxListModes($modes)
-    {
-        if (is_string($modes))
-            $modes = str_split($modes);
-
-        if (!is_array($modes)) {
-            $translator = $this->getTranslator(NULL);
-            throw new Erebot_InvalidValueException($translator->gettext(
-                'Invalid modes'));
-        }
-
-        if (!isset($this->_supported['MAXLIST']))
-            return $this->getMaxVariableModes();
-
-        foreach ($this->_supported['MAXLIST'] as $maxs => $limit) {
-            $maxs = str_split($maxs);
-            if (!count(array_diff($modes, $maxs)) && ctype_digit($limit))
-                return (int) $limit;
-        }
-        return $this->getMaxVariableModes();
-    }
-
+    /**
+     * Returns the maximum number of parameters that may
+     * be passed to any command.
+     *
+     * \retval int
+     *      Maximum number of parameters to any command.
+     *
+     * \note
+     *      This value will generally be 12, which is
+     *      what RFC 1459 defines, but may also be set
+     *      to an higher value as IRC servers are now
+     *      capable of processing more complex messages.
+     */
     public function getMaxParams()
     {
         if (isset($this->_supported['MAXPARA']) &&
@@ -779,6 +1024,22 @@ extends Erebot_Module_Base
             'No SSL information available'));
     }
 
+    /**
+     * Returns the length of the "id" portion of "safe" channels
+     * of a given type.
+     *
+     * \param string $prefix
+     *      The type of channel, represented by its prefix.
+     *
+     * \retval int
+     *      The length of the "id" portion of safe channels.
+     *
+     * \throw Erebot_InvalidValueException
+     *      The given $prefix does not represent a valid channel type.
+     *
+     * \throw Erebot_NotFoundException
+     *      Safe channels are not supported by this IRC server.
+     */
     public function getIdLength($prefix)
     {
         $translator = $this->getTranslator(NULL);
@@ -795,9 +1056,32 @@ extends Erebot_Module_Base
             return (int) $this->_supported['CHIDLEN'];
 
         throw new Erebot_NotFoundException($translator->gettext(
-            'No safe channels on this server'));
+            'Safe channels are not available on this server'));
     }
 
+    /**
+     * Indicates whether this IRC server supports a specific
+     * standard.
+     *
+     * \param string $standard
+     *      The name of the standard for which support must
+     *      be tested.
+     *
+     * \retval bool
+     *      TRUE if the IRC server supports that $standard,
+     *      FALSE otherwise.
+     *
+     * \throw Erebot_InvalidValueException
+     *      The given $standard does not a refer to a valid
+     *      standard.
+     *
+     * \note
+     *      Values returned by this method are purely
+     *      informational. An IRC server may choose to not
+     *      advise support for standards it recognized.
+     *      It may also advise support for a standard while
+     *      it only partially implements it.
+     */
     public function supportsStandard($standard)
     {
         if (!is_string($standard)) {
@@ -828,6 +1112,16 @@ extends Erebot_Module_Base
         return FALSE;
     }
 
+    /**
+     * Returns the prefix used to modify or query the list
+     * of the extended bans.
+     *
+     * \retval string
+     *      The prefix to use to manipulate extended bans.
+     *
+     * \throw Erebot_NotFoundException
+     *      This IRC server does not support extended bans.
+     */
     public function getExtendedBanPrefix()
     {
         if (is_array($this->_supported['EXTBAN']) &&
@@ -841,11 +1135,21 @@ extends Erebot_Module_Base
             'Extended bans not supported on this server'));
     }
 
+    /**
+     * Returns the list of extended bans implemented
+     * by this IRC server.
+     *
+     * \retval list
+     *      List of extended bans supported by this server.
+     *
+     * \throw Erebot_NotFoundException
+     *      This IRC server does not support extended bans.
+     */
     public function getExtendedBanModes()
     {
         if (is_array($this->_supported['EXTBAN']) &&
             isset($this->_supported['EXTBAN'][1])) {
-            return $this->_supported['EXTBAN'][1];
+            return str_split($this->_supported['EXTBAN'][1]);
         }
 
         $translator = $this->getTranslator(NULL);
