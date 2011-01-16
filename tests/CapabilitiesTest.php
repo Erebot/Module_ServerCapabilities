@@ -32,7 +32,10 @@ extends ErebotModuleTestCase
             $this->_connection,
             NULL
         );
-        $this->_module->reload(Erebot_Module_Base::RELOAD_MEMBERS);
+        $this->_module->reload(
+            Erebot_Module_Base::RELOAD_MEMBERS |
+            Erebot_Module_Base::RELOAD_INIT
+        );
     }
 
     public function tearDown()
@@ -95,8 +98,18 @@ extends ErebotModuleTestCase
             Erebot_Module_ServerCapabilities::LIST_SILENCES
         ));
         $this->assertEquals(20, $this->_module->getChanLimit('#foo'));
-        $this->assertEquals(-1, $this->_module->getChanLimit('&foo'));
-        $this->assertEquals(-1, $this->_module->getChanLimit('!foo'));
+        try {
+            $this->assertEquals(-1, $this->_module->getChanLimit('&foo'));
+            $this->fail('Expected an exception');
+        }
+        catch (Erebot_InvalidValueException $e) {
+        }
+        try {
+            $this->assertEquals(-1, $this->_module->getChanLimit('!foo'));
+            $this->fail('Expected an exception');
+        }
+        catch (Erebot_InvalidValueException $e) {
+        }
     }
 
     /**
