@@ -50,7 +50,7 @@ extends Erebot_Module_Base
     protected   $_supported;
     protected   $_parsed;
 
-    public function reload($flags)
+    public function _reload($flags)
     {
         if ($this->_channel !== NULL)
             return;
@@ -73,6 +73,10 @@ extends Erebot_Module_Base
             );
             $this->_connection->addRawHandler($handler);
         }
+    }
+
+    protected function _unload()
+    {
     }
 
     public function handleRaw(Erebot_Event_Raw $raw)
