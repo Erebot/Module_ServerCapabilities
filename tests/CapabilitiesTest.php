@@ -28,11 +28,9 @@ extends ErebotModuleTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_module = new Erebot_Module_ServerCapabilities(
-            $this->_connection,
-            NULL
-        );
+        $this->_module = new Erebot_Module_ServerCapabilities(NULL);
         $this->_module->reload(
+            $this->_connection,
             Erebot_Module_Base::RELOAD_MEMBERS |
             Erebot_Module_Base::RELOAD_INIT
         );
