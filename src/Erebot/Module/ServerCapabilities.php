@@ -88,7 +88,7 @@ extends Erebot_Module_Base
                 $this->_connection,
                 $this
             );
-            $this->_connection->dispatchEvent($event);
+            $this->_connection->dispatch($event);
             return;
         }
 
