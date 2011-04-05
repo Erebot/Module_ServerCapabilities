@@ -410,11 +410,15 @@ extends Erebot_Module_Base
      */
     public function isChannel($chan)
     {
-        if (!is_string($chan) || !strlen($chan)) {
+        if (!Erebot_Utils::stringifiable($chan)) {
             $translator = $this->getTranslator(NULL);
             throw new Erebot_InvalidValueException($translator->gettext(
                 'Bad channel name'));
         }
+
+        $chan = (string) $chan;
+        if (!strlen($chan))
+            return FALSE;
 
         $prefix     = $chan[0];
         if (isset($this->_supported['CHANTYPES']) &&
