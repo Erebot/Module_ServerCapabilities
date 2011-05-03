@@ -191,7 +191,7 @@ extends Erebot_Module_Base
     }
 
     /**
-     * Whether the server can send full the user!ident@host
+     * Whether the server can send full the user!ident\@host
      * in a reply to a NAMES command. This makes it possible
      * to build an internal list of addresses without requiring
      * an extra /WHO or /WHOIS command.
