@@ -1,6 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Erebot_Module_ServerCapabilities 0.5.0\n"
+"Project-Id-Version: Erebot_Module_ServerCapabilities 0.3.2\n"
+"Report-Msgid-Bugs-To: clicky@erebot.net\n"
+"POT-Creation-Date: 2011-04-16 12:25+0200\n"
 "PO-Revision-Date: 2011-04-16 12:25+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -10,71 +12,71 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Bad channel list ID"
-msgstr "Bad channel list ID"
+msgstr ""
 
 msgid "Bad channel name"
-msgstr "Bad channel name"
+msgstr ""
 
 msgid "Bad prefix"
-msgstr "Bad prefix"
+msgstr ""
 
 msgid "Bad standard name"
-msgstr "Bad standard name"
+msgstr ""
 
 msgid "Excepts are not available on this server"
-msgstr "Excepts are not available on this server"
+msgstr ""
 
 msgid "Extended bans not supported on this server"
-msgstr "Extended bans not supported on this server"
+msgstr ""
 
 msgid "Invalid channel list ID"
-msgstr "Invalid channel list ID"
+msgstr ""
 
 msgid "Invalid command"
-msgstr "Invalid command"
+msgstr ""
 
 msgid "Invalid data received"
-msgstr "Invalid data received"
+msgstr ""
 
 msgid "Invalid list type"
-msgstr "Invalid list type"
+msgstr ""
 
 msgid "Invalid mode"
-msgstr "Invalid mode"
+msgstr ""
 
 msgid "Invalid prefix"
-msgstr "Invalid prefix"
+msgstr ""
 
 msgid "Invalid status"
-msgstr "Invalid status"
+msgstr ""
 
 msgid "Invalid text type"
-msgstr "Invalid text type"
+msgstr ""
 
 msgid "Invites are not available on this server"
-msgstr "Invites are not available on this server"
+msgstr ""
 
 msgid "No SSL information available"
-msgstr "No SSL information available"
+msgstr ""
 
 msgid "No charset specified"
-msgstr "No charset specified"
+msgstr ""
 
 msgid "No network declared"
-msgstr "No network declared"
+msgstr ""
 
 msgid "No such mode"
-msgstr "No such mode"
+msgstr ""
 
 msgid "No such prefix"
-msgstr "No such prefix"
+msgstr ""
 
 msgid "Not a valid command name"
-msgstr "Not a valid command name"
+msgstr ""
 
 msgid "Not a valid port"
-msgstr "Not a valid port"
+msgstr ""
 
 msgid "Safe channels are not available on this server"
-msgstr "Safe channels are not available on this server"
+msgstr ""
 

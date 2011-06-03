@@ -1,77 +1,79 @@
-msgid   "unsupported.safe-channels"
-msgstr  "Les canaux sécurisés ne sont pas supportés par ce serveur"
-#
-msgid   "unsupported.invites"
-msgstr  "Les invitations ne sont pas supportées par ce serveur"
-#
-msgid   "unsupported.extended-bans"
-msgstr  "Les bans étendus ne sont pas supportés par ce serveur"
-#
-msgid   "unsupported.excepts"
-msgstr  "Les exceptions ne sont pas supportées par ce serveur"
-#
-msgid   "unspecified.network"
-msgstr  "Aucun réseau spécifié"
-#
-msgid   "unspecified.charset"
-msgstr  "Aucun jeu de caractères spécifié"
-#
-msgid   "unspecified.SSL"
-msgstr  "Aucune information sur le support de SSL n'est disponible"
-#
-msgid   "unknown.prefix"
-msgstr  "Préfixe inconnu"
-#
-msgid   "unknown.mode"
-msgstr  "Mode inconnu"
-#
-msgid   "invalid.type.text"
-msgstr  "Type de texte non valide"
-#
-msgid   "invalid.type.list"
-msgstr  "Type de liste non valide"
-#
-msgid   "invalid.status"
-msgstr  "Statut non valide"
-#
-msgid   "invalid.prefix"
-msgstr  "Préfixe non valide"
-#
-msgid   "invalid.port"
-msgstr  "Port non valide"
-#
-msgid   "invalid.mode"
-msgstr  "Mode non valide"
-#
-msgid   "invalid.data"
-msgstr  "Données non valides reçues"
-#
-msgid   "invalid.command.name"
-msgstr  "Nom de commande non valide"
-#
-msgid   "invalid.command"
-msgstr  "Commande non valide"
-#
-msgid   "invalid.channel.id"
-msgstr  "ID de liste de canaux non valide"
-#
-msgid   "bad.standard"
-msgstr  "Nom de standard incorrect"
-#
-msgid   "bad.prefix"
-msgstr  "Mauvais préfixe"
-#
-msgid   "bad.channel.name"
-msgstr  "Mauvais nom pour un canal"
-#
-msgid   "bad.channel.id"
-msgstr  "Mauvais ID de liste de canaux"
-#
-msgid   ""
-msgstr  "Project-Id-Version: Erebot_Module_ServerCapabilities 0.5.0\n"
-        "PO-Revision-Date: 2011-04-16 12:25+0200\n"
-        "Last-Translator: \n"
-        "Language-Team: \n"
-        "MIME-Version: 1.0\n"
-        "Content-Type: text/plain; charset=utf-8\n"
-        "Content-Transfer-Encoding: 8bit\n"
+msgid ""
+msgstr ""
+"Project-Id-Version: Erebot_Module_ServerCapabilities 0.5.0\n"
+"PO-Revision-Date: 2011-04-16 12:25+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Bad channel list ID"
+msgstr "Mauvais ID de liste de canaux"
+
+msgid "Bad channel name"
+msgstr "Mauvais nom pour un canal"
+
+msgid "Bad prefix"
+msgstr "Mauvais préfixe"
+
+msgid "Bad standard name"
+msgstr "Nom de standard incorrect"
+
+msgid "Excepts are not available on this server"
+msgstr "Les exceptions ne sont pas supportées par ce serveur"
+
+msgid "Extended bans not supported on this server"
+msgstr "Les bans étendus ne sont pas supportés par ce serveur"
+
+msgid "Invalid channel list ID"
+msgstr "ID de liste de canaux non valide"
+
+msgid "Invalid command"
+msgstr "Commande non valide"
+
+msgid "Invalid data received"
+msgstr "Données non valides reçues"
+
+msgid "Invalid list type"
+msgstr "Type de liste non valide"
+
+msgid "Invalid mode"
+msgstr "Mode non valide"
+
+msgid "Invalid prefix"
+msgstr "Préfixe non valide"
+
+msgid "Invalid status"
+msgstr "Statut non valide"
+
+msgid "Invalid text type"
+msgstr "Type de texte non valide"
+
+msgid "Invites are not available on this server"
+msgstr "Les invitations ne sont pas supportées par ce serveur"
+
+msgid "No SSL information available"
+msgstr "Aucune information sur le support de SSL n'est disponible"
+
+msgid "No charset specified"
+msgstr "Aucun jeu de caractères spécifié"
+
+msgid "No network declared"
+msgstr "Aucun réseau spécifié"
+
+msgid "No such mode"
+msgstr "Mode inconnu"
+
+msgid "No such prefix"
+msgstr "Préfixe inconnu"
+
+msgid "Not a valid command name"
+msgstr "Nom de commande non valide"
+
+msgid "Not a valid port"
+msgstr "Port non valide"
+
+msgid "Safe channels are not available on this server"
+msgstr "Les canaux sécurisés ne sont pas supportés par ce serveur"
+
