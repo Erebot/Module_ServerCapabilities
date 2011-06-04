@@ -1,82 +1,112 @@
-msgid ""
-msgstr ""
-"Project-Id-Version: Erebot_Module_ServerCapabilities 0.3.2\n"
-"Report-Msgid-Bugs-To: clicky@erebot.net\n"
-"POT-Creation-Date: 2011-04-16 12:25+0200\n"
-"PO-Revision-Date: 2011-04-16 12:25+0200\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-msgid "Bad channel list ID"
-msgstr ""
-
-msgid "Bad channel name"
-msgstr ""
-
-msgid "Bad prefix"
-msgstr ""
-
-msgid "Bad standard name"
-msgstr ""
-
-msgid "Excepts are not available on this server"
-msgstr ""
-
-msgid "Extended bans not supported on this server"
-msgstr ""
-
-msgid "Invalid channel list ID"
-msgstr ""
-
-msgid "Invalid command"
-msgstr ""
-
-msgid "Invalid data received"
-msgstr ""
-
-msgid "Invalid list type"
-msgstr ""
-
-msgid "Invalid mode"
-msgstr ""
-
-msgid "Invalid prefix"
-msgstr ""
-
-msgid "Invalid status"
-msgstr ""
-
-msgid "Invalid text type"
-msgstr ""
-
-msgid "Invites are not available on this server"
-msgstr ""
-
-msgid "No SSL information available"
-msgstr ""
-
-msgid "No charset specified"
-msgstr ""
-
-msgid "No network declared"
-msgstr ""
-
-msgid "No such mode"
-msgstr ""
-
-msgid "No such prefix"
-msgstr ""
-
-msgid "Not a valid command name"
-msgstr ""
-
-msgid "Not a valid port"
-msgstr ""
-
-msgid "Safe channels are not available on this server"
-msgstr ""
-
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid   ""
+msgstr  "Project-Id-Version: Erebot_Module_ServerCapabilities 0.3.2\n"
+        "Report-Msgid-Bugs-To: clicky@erebot.net\n"
+        "POT-Creation-Date: 2011-06-03 22:25+0200\n"
+        "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+        "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+        "Language-Team: LANGUAGE <LL@li.org>\n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=CHARSET\n"
+        "Content-Transfer-Encoding: 8bit\n"
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 714
+msgid   "Bad channel list ID"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 416
+msgid   "Bad channel name"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 1056
+msgid   "Bad prefix"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 1098
+msgid   "Bad standard name"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 723
+msgid   "Excepts are not available on this server"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 1143
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 1165
+msgid   "Extended bans not supported on this server"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 742
+msgid   "Invalid channel list ID"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 918
+msgid   "Invalid command"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 1018
+msgid   "Invalid data received"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 480
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 510
+msgid   "Invalid list type"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 773
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 867
+msgid   "Invalid mode"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 820
+msgid   "Invalid prefix"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 377
+msgid   "Invalid status"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 589
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 625
+msgid   "Invalid text type"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 733
+msgid   "Invites are not available on this server"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 1032
+msgid   "No SSL information available"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 663
+msgid   "No charset specified"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 687
+msgid   "No network declared"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 791
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 884
+msgid   "No such mode"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 840
+msgid   "No such prefix"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 293
+msgid   "Not a valid command name"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 1025
+msgid   "Not a valid port"
+msgstr  ""
+#
+# File: /home/looksup/Documents/Erebot/modules/ServerCapabilities/trunk/src/Erebot/Module/ServerCapabilities.php, line: 1067
+msgid   "Safe channels are not available on this server"
+msgstr  ""
