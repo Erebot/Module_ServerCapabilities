@@ -28,6 +28,10 @@ extends ErebotModuleTestCase
     public function setUp()
     {
         parent::setUp();
+        $this->_connection
+            ->expects($this->any())
+            ->method('getRawProfileLoader')
+            ->will($this->returnValue($this));
         $this->_module = new Erebot_Module_ServerCapabilities(NULL);
         $this->_module->reload(
             $this->_connection,
@@ -40,6 +44,12 @@ extends ErebotModuleTestCase
     {
         $this->_module->unload();
         parent::tearDown();
+    }
+
+    public function getRawByName($rawName)
+    {
+        if ($rawName == 'RPL_ISUPPORT')
+            return 5;
     }
 
     public function testISupport()
