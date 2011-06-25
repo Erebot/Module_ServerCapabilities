@@ -69,7 +69,7 @@ extends Erebot_Module_Base
 
             $handler = new Erebot_RawHandler(
                 array($this, 'handleRaw'),
-                Erebot_Interface_Event_Raw::RPL_LUSERCLIENT
+                $this->getRawRef('RPL_LUSERCLIENT')
             );
             $this->_connection->addRawHandler($handler);
         }
@@ -81,8 +81,9 @@ extends Erebot_Module_Base
 
     public function handleRaw(Erebot_Event_Raw $raw)
     {
-        $rawCode = $raw->getRaw();
-        if ($rawCode == Erebot_Interface_Event_Raw::RPL_LUSERCLIENT && !$this->_parsed) {
+        $rawCode    = $raw->getRaw();
+        $loader     = $this->_connection->getRawProfileLoader();
+        if ($rawCode == $loader->getRawByName('RPL_LUSERCLIENT') && !$this->_parsed) {
             $this->_parsed = TRUE;
             $event = new Erebot_Event_ServerCapabilities(
                 $this->_connection,
@@ -92,7 +93,7 @@ extends Erebot_Module_Base
             return;
         }
 
-        if ($rawCode != Erebot_Interface_Event_Raw::RPL_ISUPPORT)
+        if ($rawCode != $loader->getRawByName('RPL_ISUPPORT'))
             return;
 
         $tokens = explode(' ', $raw->getText());
