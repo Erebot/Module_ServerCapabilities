@@ -779,8 +779,11 @@ extends Erebot_Module_Base
         else
             $prefixes = $this->_supported['PREFIX'];
 
-        $ok = preg_match(self::PATTERN_PREFIX,
-            $this->_supported['PREFIX'], $matches);
+        $ok = preg_match(
+            self::PATTERN_PREFIX,
+            $prefixes,
+            $matches
+        );
 
         if ($ok) {
             $pos = strpos($matches[1], $mode);
@@ -828,7 +831,7 @@ extends Erebot_Module_Base
 
         $ok = preg_match(
             self::PATTERN_PREFIX,
-            $this->_supported['PREFIX'],
+            $prefixes,
             $matches
         );
         if ($ok) {
