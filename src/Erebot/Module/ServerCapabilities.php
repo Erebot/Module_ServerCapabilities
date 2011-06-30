@@ -63,7 +63,7 @@ extends Erebot_Module_Base
         if ($flags & self::RELOAD_HANDLERS) {
             $handler = new Erebot_RawHandler(
                 array($this, 'handleRaw'),
-                Erebot_Interface_Event_Raw::RPL_ISUPPORT
+                Erebot_Interface_RawProfile_005::RPL_ISUPPORT
             );
             $this->_connection->addRawHandler($handler);
 
