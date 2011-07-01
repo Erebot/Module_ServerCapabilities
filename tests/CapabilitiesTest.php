@@ -56,7 +56,7 @@ extends ErebotModuleTestCase
     {
         $raw = new Erebot_Event_Raw(
             $this->_connection,
-            Erebot_Interface_Event_Raw::RPL_ISUPPORT,
+            Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
             'source', 'target',
             'CMDS=KNOCK,MAP,DCCALLOW,USERIP NAMESX SAFELIST HCN '.
             'MAXCHANNELS=20 CHANLIMIT=#:20 MAXLIST=b:60,e:60,I:60 '.
@@ -127,7 +127,7 @@ extends ErebotModuleTestCase
     {
         $raw = new Erebot_Event_Raw(
             $this->_connection,
-            Erebot_Interface_Event_Raw::RPL_ISUPPORT,
+            Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
             'source', 'target',
             ''
         );
@@ -139,7 +139,7 @@ extends ErebotModuleTestCase
     {
         $raw = new Erebot_Event_Raw(
             $this->_connection,
-            Erebot_Interface_Event_Raw::RPL_ISUPPORT,
+            Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
             'source', 'target',
             'SSL='
         );
@@ -151,7 +151,7 @@ extends ErebotModuleTestCase
     {
         $raw = new Erebot_Event_Raw(
             $this->_connection,
-            Erebot_Interface_Event_Raw::RPL_ISUPPORT,
+            Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
             'source', 'target',
             'SSL=127.0.0.1:7002'
         );
@@ -166,7 +166,7 @@ extends ErebotModuleTestCase
     {
         $raw = new Erebot_Event_Raw(
             $this->_connection,
-            Erebot_Interface_Event_Raw::RPL_ISUPPORT,
+            Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
             'source', 'target',
             'SSL=1.2.3.4:6668;4.3.2.1:6669;*:6660;'
         );
