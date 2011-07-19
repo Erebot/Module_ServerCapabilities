@@ -62,13 +62,13 @@ extends Erebot_Module_Base
 
         if ($flags & self::RELOAD_HANDLERS) {
             $handler = new Erebot_RawHandler(
-                array($this, 'handleRaw'),
+                new Erebot_Callable(array($this, 'handleRaw')),
                 $this->getRawRef('RPL_ISUPPORT')
             );
             $this->_connection->addRawHandler($handler);
 
             $handler = new Erebot_RawHandler(
-                array($this, 'handleRaw'),
+                new Erebot_Callable(array($this, 'handleRaw')),
                 $this->getRawRef('RPL_LUSERCLIENT')
             );
             $this->_connection->addRawHandler($handler);
@@ -83,7 +83,8 @@ extends Erebot_Module_Base
     {
         $rawCode    = $raw->getRaw();
         $loader     = $this->_connection->getRawProfileLoader();
-        if ($rawCode == $loader->getRawByName('RPL_LUSERCLIENT') && !$this->_parsed) {
+        if ($rawCode == $loader->getRawByName('RPL_LUSERCLIENT') &&
+            !$this->_parsed) {
             $this->_parsed = TRUE;
             $event = new Erebot_Event_ServerCapabilities(
                 $this->_connection,
