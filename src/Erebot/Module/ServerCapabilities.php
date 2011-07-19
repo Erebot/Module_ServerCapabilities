@@ -63,7 +63,7 @@ extends Erebot_Module_Base
         if ($flags & self::RELOAD_HANDLERS) {
             $handler = new Erebot_RawHandler(
                 array($this, 'handleRaw'),
-                Erebot_Interface_RawProfile_005::RPL_ISUPPORT
+                $this->getRawRef('RPL_ISUPPORT')
             );
             $this->_connection->addRawHandler($handler);
 
@@ -294,6 +294,22 @@ extends Erebot_Module_Base
                 'Not a valid command name'));
         }
         $cmdName = strtoupper($cmdName);
+
+        $rfc2812 = array(
+            'AWAY',
+            'REHASH',
+            'DIE',
+            'RESTART',
+            'SUMMON',
+            'USERS',
+            'WALLOPS',
+            'USERHOST',
+            'ISON',
+        );
+
+        if ($this->supportsStandard('RFC2812') &&
+            in_array($cmdName, $rfc2812))
+            return TRUE;
 
         if (isset($this->_supported[$cmdName]))
             return TRUE;
