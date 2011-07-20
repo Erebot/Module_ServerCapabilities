@@ -79,7 +79,10 @@ extends Erebot_Module_Base
     {
     }
 
-    public function handleRaw(Erebot_Event_Raw $raw)
+    public function handleRaw(
+        Erebot_Interface_RawHandler $handler,
+        Erebot_Interface_Event_Raw  $raw
+    )
     {
         $rawCode    = $raw->getRaw();
         $loader     = $this->_connection->getRawProfileLoader();
