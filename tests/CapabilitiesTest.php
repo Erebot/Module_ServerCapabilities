@@ -63,7 +63,7 @@ extends ErebotModuleTestCase
             'NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 '.
             'AWAYLEN=307 MAXTARGETS=20 :are supported by this server'
         );
-        $this->_module->handleRaw($raw);
+        $this->_module->handleRaw($this->_rawHandler, $raw);
         $listExtensions = array(
             Erebot_Module_ServerCapabilities::ELIST_MASK,
             Erebot_Module_ServerCapabilities::ELIST_NEG_MASK,
@@ -131,7 +131,7 @@ extends ErebotModuleTestCase
             'source', 'target',
             ''
         );
-        $this->_module->handleRaw($raw);
+        $this->_module->handleRaw($this->_rawHandler, $raw);
         $this->_module->getSSL();
     }
 
@@ -143,7 +143,7 @@ extends ErebotModuleTestCase
             'source', 'target',
             'SSL='
         );
-        $this->_module->handleRaw($raw);
+        $this->_module->handleRaw($this->_rawHandler, $raw);
         $this->assertEquals(array(), $this->_module->getSSL());
     }
 
@@ -155,7 +155,7 @@ extends ErebotModuleTestCase
             'source', 'target',
             'SSL=127.0.0.1:7002'
         );
-        $this->_module->handleRaw($raw);
+        $this->_module->handleRaw($this->_rawHandler, $raw);
         $this->assertEquals(
             array('127.0.0.1' => 7002),
             $this->_module->getSSL()
@@ -170,7 +170,7 @@ extends ErebotModuleTestCase
             'source', 'target',
             'SSL=1.2.3.4:6668;4.3.2.1:6669;*:6660;'
         );
-        $this->_module->handleRaw($raw);
+        $this->_module->handleRaw($this->_rawHandler, $raw);
         $expected = array(
             '1.2.3.4'   => 6668,
             '4.3.2.1'   => 6669,
