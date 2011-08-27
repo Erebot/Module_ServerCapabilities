@@ -16,15 +16,39 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once(
-    dirname(__FILE__) .
-    DIRECTORY_SEPARATOR . 'testenv' .
-    DIRECTORY_SEPARATOR . 'bootstrap.php'
-);
-
 class   ServerCapabilitiesTest
 extends ErebotModuleTestCase
 {
+    protected function _mockRaw($num, $source, $target, $text)
+    {
+        $event = $this->getMock(
+            'Erebot_Interface_Event_Raw',
+            array(), array(), '', FALSE, FALSE
+        );
+
+        $event
+            ->expects($this->any())
+            ->method('getConnection')
+            ->will($this->returnValue($this->_connection));
+        $event
+            ->expects($this->any())
+            ->method('getRaw')
+            ->will($this->returnValue($num));
+        $event
+            ->expects($this->any())
+            ->method('getSource')
+            ->will($this->returnValue($source));
+        $event
+            ->expects($this->any())
+            ->method('getTarget')
+            ->will($this->returnValue($target));
+        $event
+            ->expects($this->any())
+            ->method('getText')
+            ->will($this->returnValue($text));
+        return $event;
+    }
+
     public function setUp()
     {
         parent::setUp();
@@ -54,8 +78,7 @@ extends ErebotModuleTestCase
 
     public function testISupport()
     {
-        $raw = new Erebot_Event_Raw(
-            $this->_connection,
+        $raw = $this->_mockRaw(
             Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
             'source', 'target',
             'CMDS=KNOCK,MAP,DCCALLOW,USERIP NAMESX SAFELIST HCN '.
@@ -125,8 +148,7 @@ extends ErebotModuleTestCase
      */
     public function testSSL1()
     {
-        $raw = new Erebot_Event_Raw(
-            $this->_connection,
+        $raw = $this->_mockRaw(
             Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
             'source', 'target',
             ''
@@ -137,8 +159,7 @@ extends ErebotModuleTestCase
 
     public function testSSL2()
     {
-        $raw = new Erebot_Event_Raw(
-            $this->_connection,
+        $raw = $this->_mockRaw(
             Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
             'source', 'target',
             'SSL='
@@ -149,8 +170,7 @@ extends ErebotModuleTestCase
 
     public function testSSL3()
     {
-        $raw = new Erebot_Event_Raw(
-            $this->_connection,
+        $raw = $this->_mockRaw(
             Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
             'source', 'target',
             'SSL=127.0.0.1:7002'
@@ -164,8 +184,7 @@ extends ErebotModuleTestCase
 
     public function testSSL4()
     {
-        $raw = new Erebot_Event_Raw(
-            $this->_connection,
+        $raw = $this->_mockRaw(
             Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
             'source', 'target',
             'SSL=1.2.3.4:6668;4.3.2.1:6669;*:6660;'
