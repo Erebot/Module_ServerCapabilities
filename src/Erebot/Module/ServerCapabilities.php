@@ -706,7 +706,7 @@ extends Erebot_Module_Base
      *      of any specific IRC network.
      *
      * \warning
-     *      The name return by this method is purely informative.
+     *      The name returned by this method is purely informative.
      *      The server is free to send any name it chooses.
      *      Don't rely on this to implement security checks!
      */
