@@ -786,6 +786,42 @@ extends Erebot_Module_Base
     }
 
     /**
+     * Indicates whether the given mode is a valid
+     * channel privilege (such as "o" or "v") or not.
+     *
+     * \param string $mode
+     *      The channel mode to test.
+     *
+     * \retval bool
+     *      TRUE if the given mode can be used as a
+     *      valid channel privilege, FALSE otherwise.
+     */
+    public function isChannelPrivilege($mode)
+    {
+        $translator = $this->getTranslator(NULL);
+        if (!is_string($mode) || strlen($mode) != 1)
+            throw new Erebot_InvalidValueException(
+                $translator->gettext('Invalid mode')
+            );
+
+        if (!isset($this->_supported['PREFIX']))
+            // Default prefixes based on RFC 1459.
+            $prefixes = '(ov)@+';
+        else
+            $prefixes = $this->_supported['PREFIX'];
+
+        $ok = preg_match(
+            self::PATTERN_PREFIX,
+            $prefixes,
+            $matches
+        );
+
+        if ($ok)
+            return (strpos($matches[1], $mode) !== FALSE);
+        return FALSE;
+    }
+
+    /**
      * Returns the prefix associated with a given
      * channel mode representing a specific status
      * (eg. '+' for voices [v] and '@' for operators [o]).
