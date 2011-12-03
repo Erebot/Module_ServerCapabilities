@@ -293,9 +293,9 @@ extends Erebot_Module_Base
     public function hasCommand($cmdName)
     {
         if (!is_string($cmdName)) {
-            $translator = $this->getTranslator(NULL);
+            $fmt = $this->getFormatter(NULL);
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Not a valid command name')
+                $fmt->_('Not a valid command name')
             );
         }
         $cmdName = strtoupper($cmdName);
@@ -395,9 +395,9 @@ extends Erebot_Module_Base
     public function hasStatusMsg($status)
     {
         if (!is_string($status) || strlen($status) != 1) {
-            $translator = $this->getTranslator(NULL);
+            $fmt = $this->getFormatter(NULL);
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Invalid status')
+                $fmt->_('Invalid status')
             );
         }
 
@@ -435,9 +435,9 @@ extends Erebot_Module_Base
     public function isChannel($chan)
     {
         if (!Erebot_Utils::stringifiable($chan)) {
-            $translator = $this->getTranslator(NULL);
+            $fmt = $this->getFormatter(NULL);
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Bad channel name')
+                $fmt->_('Bad channel name')
             );
         }
 
@@ -499,10 +499,10 @@ extends Erebot_Module_Base
      */
     public function getMaxListSize($list)
     {
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         if (!is_int($list)) {
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Invalid list type')
+                $fmt->_('Invalid list type')
             );
         }
 
@@ -534,7 +534,7 @@ extends Erebot_Module_Base
 
             default:
                 throw new Erebot_InvalidValueException(
-                    $translator->gettext('Invalid list type')
+                    $fmt->_('Invalid list type')
                 );
         }
     }
@@ -611,10 +611,10 @@ extends Erebot_Module_Base
      */
     public function getMaxTextLen($type)
     {
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         if (!is_int($type))
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Invalid text type')
+                $fmt->_('Invalid text type')
             );
 
         switch ($type) {
@@ -651,7 +651,7 @@ extends Erebot_Module_Base
 
             default:
                 throw new Erebot_InvalidValueException(
-                    $translator->gettext('Invalid text type')
+                    $fmt->_('Invalid text type')
                 );
         }
         return -1;
@@ -689,9 +689,9 @@ extends Erebot_Module_Base
             is_string($this->_supported['CHARSET']))
             return $this->_supported['CHARSET'];
 
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         throw new Erebot_NotFoundException(
-            $translator->gettext('No charset specified')
+            $fmt->_('No charset specified')
         );
     }
 
@@ -717,7 +717,7 @@ extends Erebot_Module_Base
             return $this->_supported['NETWORK'];
 
         throw new Erebot_NotFoundException(
-            $translator->gettext('No network declared')
+            $fmt->_('No network declared')
         );
     }
 
@@ -742,10 +742,10 @@ extends Erebot_Module_Base
      */
     public function getChanListMode($list)
     {
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         if (!is_int($list))
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Bad channel list ID')
+                $fmt->_('Bad channel list ID')
             );
 
         switch ($list) {
@@ -755,7 +755,7 @@ extends Erebot_Module_Base
             case self::LIST_EXCEPTS:
                 if (!isset($this->_supported['EXCEPTS']))
                     throw new Erebot_NotFoundException(
-                        $translator->gettext(
+                        $fmt->_(
                             'Excepts are not available on this server'
                         )
                     );
@@ -768,7 +768,7 @@ extends Erebot_Module_Base
             case self::LIST_INVITES:
                 if (!isset($this->_supported['INVEX']))
                     throw new Erebot_NotFoundException(
-                        $translator->gettext(
+                        $fmt->_(
                             'Invites are not available on this server'
                         )
                     );
@@ -780,7 +780,7 @@ extends Erebot_Module_Base
 
             default:
                 throw new Erebot_InvalidValueException(
-                    $translator->gettext('Invalid channel list ID')
+                    $fmt->_('Invalid channel list ID')
                 );
         }
     }
@@ -798,10 +798,10 @@ extends Erebot_Module_Base
      */
     public function isChannelPrivilege($mode)
     {
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         if (!is_string($mode) || strlen($mode) != 1)
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Invalid mode')
+                $fmt->_('Invalid mode')
             );
 
         if (!isset($this->_supported['PREFIX']))
@@ -845,10 +845,10 @@ extends Erebot_Module_Base
      */
     public function getChanPrefixForMode($mode)
     {
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         if (!is_string($mode) || strlen($mode) != 1)
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Invalid mode')
+                $fmt->_('Invalid mode')
             );
 
         if (!isset($this->_supported['PREFIX']))
@@ -870,7 +870,7 @@ extends Erebot_Module_Base
         }
 
         throw new Erebot_NotFoundException(
-            $translator->gettext('No such mode')
+            $fmt->_('No such mode')
         );
     }
 
@@ -897,10 +897,10 @@ extends Erebot_Module_Base
      */
     public function getChanModeForPrefix($prefix)
     {
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         if (!is_string($prefix) || strlen($prefix) != 1)
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Invalid prefix')
+                $fmt->_('Invalid prefix')
             );
 
         if (!isset($this->_supported['PREFIX']))
@@ -921,7 +921,7 @@ extends Erebot_Module_Base
         }
 
         throw new Erebot_NotFoundException(
-            $translator->gettext('No such prefix')
+            $fmt->_('No such prefix')
         );
     }
 
@@ -946,10 +946,10 @@ extends Erebot_Module_Base
      */
     public function qualifyChannelMode($mode)
     {
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         if (!is_string($mode) || strlen($mode) != 1)
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Invalid mode')
+                $fmt->_('Invalid mode')
             );
 
         if (!isset($this->_supported['CHANMODES']) ||
@@ -966,7 +966,7 @@ extends Erebot_Module_Base
             $type++;
         }
         throw new Erebot_NotFoundException(
-            $translator->gettext('No such mode')
+            $fmt->_('No such mode')
         );
     }
 
@@ -999,9 +999,9 @@ extends Erebot_Module_Base
     public function getMaxTargets($cmd)
     {
         if (!is_string($cmd)) {
-            $translator = $this->getTranslator(NULL);
+            $fmt = $this->getFormatter(NULL);
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Invalid command')
+                $fmt->_('Invalid command')
             );
         }
 
@@ -1088,7 +1088,7 @@ extends Erebot_Module_Base
      */
     public function getSSL()
     {
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         if (isset($this->_supported['SSL'])) {
             // Received "SSL=", so assume no SSL support.
             if ($this->_supported['SSL'] === TRUE)
@@ -1102,7 +1102,7 @@ extends Erebot_Module_Base
                 $ssl = $this->_supported['SSL'];
             else
                 throw new Erebot_InvalidValueException(
-                    $translator->gettext('Invalid data received')
+                    $fmt->_('Invalid data received')
                 );
 
             $result = array();
@@ -1110,7 +1110,7 @@ extends Erebot_Module_Base
                 $port = (int) $val;
                 if (!ctype_digit($val) || $port <= 0 || $port > 65535)
                     throw new Erebot_InvalidValueException(
-                        $translator->gettext('Not a valid port')
+                        $fmt->_('Not a valid port')
                     );
                 $result[$ip] = $port;
             }
@@ -1118,7 +1118,7 @@ extends Erebot_Module_Base
         }
 
         throw new Erebot_NotFoundException(
-            $translator->gettext('No SSL information available')
+            $fmt->_('No SSL information available')
         );
     }
 
@@ -1140,10 +1140,10 @@ extends Erebot_Module_Base
      */
     public function getIdLength($prefix)
     {
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         if (!is_string($prefix) || strlen($prefix) != 1)
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Bad prefix')
+                $fmt->_('Bad prefix')
             );
 
         if (isset($this->_supported['IDCHAN'][$prefix]) &&
@@ -1155,7 +1155,7 @@ extends Erebot_Module_Base
             return (int) $this->_supported['CHIDLEN'];
 
         throw new Erebot_NotFoundException(
-            $translator->gettext(
+            $fmt->_(
                 'Safe channels are not available on this server'
             )
         );
@@ -1187,9 +1187,9 @@ extends Erebot_Module_Base
     public function supportsStandard($standard)
     {
         if (!is_string($standard)) {
-            $translator = $this->getTranslator(NULL);
+            $fmt = $this->getFormatter(NULL);
             throw new Erebot_InvalidValueException(
-                $translator->gettext('Bad standard name')
+                $fmt->_('Bad standard name')
             );
         }
 
@@ -1232,10 +1232,10 @@ extends Erebot_Module_Base
             return $this->_supported['EXTBAN'][0];
         }
 
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         throw new Erebot_NotFoundException(
-            $translator->gettext(
-                'Extended bans not supported on this server'
+            $fmt->_(
+                'Extended bans are not supported on this server'
             )
         );
     }
@@ -1257,9 +1257,9 @@ extends Erebot_Module_Base
             return str_split($this->_supported['EXTBAN'][1]);
         }
 
-        $translator = $this->getTranslator(NULL);
+        $fmt = $this->getFormatter(NULL);
         throw new Erebot_NotFoundException(
-            $translator->gettext('Extended bans not supported on this server')
+            $fmt->_('Extended bans are not supported on this server')
         );
     }
 }
