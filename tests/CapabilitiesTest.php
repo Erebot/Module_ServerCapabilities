@@ -17,7 +17,7 @@
 */
 
 class   ServerCapabilitiesTest
-extends ErebotModuleTestCase
+extends Erebot_Testenv_Module_TestCase
 {
     protected function _mockRaw($num, $source, $target, $text)
     {
@@ -51,17 +51,14 @@ extends ErebotModuleTestCase
 
     public function setUp()
     {
+        $this->_module = new Erebot_Module_ServerCapabilities(NULL);
         parent::setUp();
+
         $this->_connection
             ->expects($this->any())
             ->method('getRawProfileLoader')
             ->will($this->returnValue($this));
-        $this->_module = new Erebot_Module_ServerCapabilities(NULL);
-        $styling = $this->getMockForAbstractClass(
-            'StylingStub',
-            array(), '', FALSE, FALSE
-        );
-        $this->_module->setFactory('!Styling', get_class($styling));
+
         $this->_module->reload(
             $this->_connection,
             Erebot_Module_Base::RELOAD_MEMBERS |
