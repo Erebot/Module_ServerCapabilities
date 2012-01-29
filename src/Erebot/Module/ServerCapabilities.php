@@ -17,39 +17,96 @@
 */
 
 /**
- * This module can determine what a server is capable of.
+ * \brief
+ *      A module that can determine what an IRC server
+ *      is capable of.
  */
 class   Erebot_Module_ServerCapabilities
 extends Erebot_Module_Base
 {
+    /// Refers to the list of bans.
     const LIST_BANS         = 0;
+
+    /// Refers to the list of silenced persons.
     const LIST_SILENCES     = 1;
+
+    /// Refers to the list of ban exceptions.
     const LIST_EXCEPTS      = 2;
+
+    /// Refers to the list of invitations.
     const LIST_INVITES      = 3;
+
+    /// Refers to the list of watched persons.
     const LIST_WATCHES      = 4;
 
+    /// Refers to channel names.
     const TEXT_CHAN_NAME    = 0;
+
+    /// Refers to nicknames.
     const TEXT_NICKNAME     = 1;
+
+    /// Refers to channel topics.
     const TEXT_TOPIC        = 2;
+
+    /// Refers to kick messages.
     const TEXT_KICK         = 3;
+
+    /// Refers to away messages.
     const TEXT_AWAY         = 4;
 
+    /// Refers to modes that add or remove a nick or address to a list.
     const MODE_TYPE_A       = 0;
+
+    /// Refers to modes that change a setting and always have a parameter.
     const MODE_TYPE_B       = 1;
+
+    /**
+     * Refers to modes that change a setting
+     * and only have a parameter when set.
+     */
     const MODE_TYPE_C       = 2;
+
+    /// Refers to modes that change a setting and never have a parameter.
     const MODE_TYPE_D       = 3;
 
+    /// ELIST mode for a mask search.
     const ELIST_MASK        = 'M';
+
+    /// ELIST mode for a negative mask search.
     const ELIST_NEG_MASK    = 'N';
+
+    /// ELIST mode for usercount search.
     const ELIST_USERS       = 'U';
+
+    /// ELIST mode for creation time search.
     const ELIST_CREATION    = 'C';
+
+    /// ELIST mode for topic search.
     const ELIST_TOPIC       = 'T';
 
+    /// Pattern for a prefix-to-mode mapping.
     const PATTERN_PREFIX    = '/^\\(([^\\)]+)\\)(.*)$/';
 
-    protected   $_supported;
-    protected   $_parsed;
 
+    /// Modes/commands/exteions/options supported by this IRC server.
+    protected $_supported;
+
+    /// Whether server capabilities have been parsed yet or not.
+    protected $_parsed;
+
+
+    /**
+     * This method is called whenever the module is (re)loaded.
+     *
+     * \param int $flags
+     *      A bitwise OR of the Erebot_Module_Base::RELOAD_*
+     *      constants. Your method should take proper actions
+     *      depending on the value of those flags.
+     *
+     * \note
+     *      See the documentation on individual RELOAD_*
+     *      constants for a list of possible values.
+     */
     public function _reload($flags)
     {
         if ($this->_channel !== NULL)
@@ -75,10 +132,17 @@ extends Erebot_Module_Base
         }
     }
 
-    protected function _unload()
-    {
-    }
-
+    /**
+     * Handles raw numeric events.
+     *
+     * \param Erebot_Interface_RawHandler $handler
+     *      Handler that triggered this event.
+     *
+     * \param Erebot_Interface_Event_Raw $raw
+     *      The raw event to handle.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function handleRaw(
         Erebot_Interface_RawHandler $handler,
         Erebot_Interface_Event_Raw  $raw
@@ -111,6 +175,16 @@ extends Erebot_Module_Base
         unset($token);
     }
 
+    /**
+     * Parses a token from the 005 raw numeric
+     * event.
+     *
+     * \param string $token
+     *      A token from the 005 raw event.
+     *
+     * \retval array
+     *      Result of the parsing.
+     */
     protected function _parseToken($token)
     {
         $pos = strpos($token, '=');
