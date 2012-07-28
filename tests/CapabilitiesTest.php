@@ -54,10 +54,24 @@ extends Erebot_Testenv_Module_TestCase
         $this->_module = new Erebot_Module_ServerCapabilities(NULL);
         parent::setUp();
 
+        $profile = $this->getMockForAbstractClass(
+            'Erebot_NumericProfile_Base',
+            array(),
+            '',
+            FALSE,
+            FALSE,
+            TRUE,
+            array('offsetGet')
+        );
+        $profile
+            ->expects($this->any())
+            ->method('offsetGet')
+            ->will($this->returnCallback(array($this, 'getRawByName')));
+
         $this->_connection
             ->expects($this->any())
-            ->method('getRawProfileLoader')
-            ->will($this->returnValue($this));
+            ->method('getNumericProfile')
+            ->will($this->returnValue($profile));
 
         $this->_module->reload(
             $this->_connection,
@@ -81,8 +95,7 @@ extends Erebot_Testenv_Module_TestCase
     public function testISupport()
     {
         $raw = $this->_mockRaw(
-            Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
-            'source', 'target',
+            005, 'source', 'target',
             'CMDS=KNOCK,MAP,DCCALLOW,USERIP NAMESX SAFELIST HCN '.
             'MAXCHANNELS=20 CHANLIMIT=#:20 MAXLIST=b:60,e:60,I:60 '.
             'NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 '.
@@ -150,33 +163,21 @@ extends Erebot_Testenv_Module_TestCase
      */
     public function testSSL1()
     {
-        $raw = $this->_mockRaw(
-            Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
-            'source', 'target',
-            ''
-        );
+        $raw = $this->_mockRaw(005, 'source', 'target', '');
         $this->_module->handleRaw($this->_rawHandler, $raw);
         $this->_module->getSSL();
     }
 
     public function testSSL2()
     {
-        $raw = $this->_mockRaw(
-            Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
-            'source', 'target',
-            'SSL='
-        );
+        $raw = $this->_mockRaw(005, 'source', 'target', 'SSL=');
         $this->_module->handleRaw($this->_rawHandler, $raw);
         $this->assertEquals(array(), $this->_module->getSSL());
     }
 
     public function testSSL3()
     {
-        $raw = $this->_mockRaw(
-            Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
-            'source', 'target',
-            'SSL=127.0.0.1:7002'
-        );
+        $raw = $this->_mockRaw(005, 'source', 'target', 'SSL=127.0.0.1:7002');
         $this->_module->handleRaw($this->_rawHandler, $raw);
         $this->assertEquals(
             array('127.0.0.1' => 7002),
@@ -187,8 +188,7 @@ extends Erebot_Testenv_Module_TestCase
     public function testSSL4()
     {
         $raw = $this->_mockRaw(
-            Erebot_Interface_RawProfile_005::RPL_ISUPPORT,
-            'source', 'target',
+            005, 'source', 'target',
             'SSL=1.2.3.4:6668;4.3.2.1:6669;*:6660;'
         );
         $this->_module->handleRaw($this->_rawHandler, $raw);
