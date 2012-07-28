@@ -582,7 +582,7 @@ extends Erebot_Module_Base
         switch ($list) {
             case self::LIST_BANS:
             case self::LIST_EXCEPTS:
-            case self::LIST_INVITES:
+            case self::LIST_INVITES:{
                 $mode = $this->getChanListMode($list);
                 if (isset($this->_supported['MAXLIST'][$mode]) &&
                     ctype_digit($this->_supported['MAXLIST'][$mode]))
@@ -592,18 +592,21 @@ extends Erebot_Module_Base
                     ctype_digit($this->_supported['MAXBANS']))
                     return (int) $this->_supported['MAXBANS'];
                 return NULL;
+            }
 
-            case self::LIST_SILENCES:
+            case self::LIST_SILENCES:{
                 if (isset($this->_supported['SILENCE']) &&
                     ctype_digit($this->_supported['SILENCE']))
                     return (int) $this->_supported['SILENCE'];
                 return NULL;
+            }
 
-            case self::LIST_WATCHES:
+            case self::LIST_WATCHES:{
                 if (isset($this->_supported['WATCH']) &&
                     ctype_digit($this->_supported['WATCH']))
                     return (int) $this->_supported['WATCH'];
                 return NULL;
+            }
 
             default:
                 throw new Erebot_InvalidValueException(
@@ -691,36 +694,41 @@ extends Erebot_Module_Base
             );
 
         switch ($type) {
-            case self::TEXT_AWAY:
+            case self::TEXT_AWAY:{
                 if (isset($this->_supported['AWAYLEN']) &&
                     ctype_digit($this->_supported['AWAYLEN']))
                     return (int) $this->_supported['AWAYLEN'];
                 break;
+            }
 
-            case self::TEXT_CHAN_NAME:
+            case self::TEXT_CHAN_NAME:{
                 if (isset($this->_supported['CHANNELLEN']) &&
                     ctype_digit($this->_supported['CHANNELLEN']))
                     return (int) $this->_supported['CHANNELLEN'];
                 return 200;
+            }
 
-            case self::TEXT_KICK:
+            case self::TEXT_KICK:{
                 if (isset($this->_supported['KICKLEN']) &&
                     ctype_digit($this->_supported['KICKLEN']))
                     return (int) $this->_supported['KICKLEN'];
                 break;
+            }
 
-            case self::TEXT_NICKNAME:
+            case self::TEXT_NICKNAME:{
                 if (isset($this->_supported['NICKLEN']) &&
                     ctype_digit($this->_supported['NICKLEN']))
                     return (int) $this->_supported['NICKLEN'];
                 return 9;
+            }
 
-            case self::TEXT_TOPIC:
+            case self::TEXT_TOPIC:{
                 if (isset($this->_supported['TOPICLEN'])) {
                     if (ctype_digit($this->_supported['TOPICLEN']))
                         return (int) $this->_supported['TOPICLEN'];
                 }
                 return -1;
+            }
 
             default:
                 throw new Erebot_InvalidValueException(
@@ -822,10 +830,11 @@ extends Erebot_Module_Base
             );
 
         switch ($list) {
-            case self::LIST_BANS:
+            case self::LIST_BANS:{
                 return 'b';
+            }
 
-            case self::LIST_EXCEPTS:
+            case self::LIST_EXCEPTS:{
                 if (!isset($this->_supported['EXCEPTS']))
                     throw new Erebot_NotFoundException(
                         $fmt->_(
@@ -837,8 +846,9 @@ extends Erebot_Module_Base
                     return 'e';
                 return $this->_supported['EXCEPTS'];
                 break;
+            }
 
-            case self::LIST_INVITES:
+            case self::LIST_INVITES:{
                 if (!isset($this->_supported['INVEX']))
                     throw new Erebot_NotFoundException(
                         $fmt->_(
@@ -850,6 +860,7 @@ extends Erebot_Module_Base
                     return 'I';
                 return $this->_supported['INVEX'];
                 break;
+            }
 
             default:
                 throw new Erebot_InvalidValueException(
