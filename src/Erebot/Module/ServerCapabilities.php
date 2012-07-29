@@ -118,39 +118,39 @@ extends Erebot_Module_Base
         }
 
         if ($flags & self::RELOAD_HANDLERS) {
-            $handler = new Erebot_RawHandler(
-                new Erebot_Callable(array($this, 'handleRaw')),
-                $this->getRawRef('RPL_ISUPPORT')
+            $handler = new Erebot_NumericHandler(
+                new Erebot_Callable(array($this, 'handleNumeric')),
+                $this->getNumRef('RPL_ISUPPORT')
             );
-            $this->_connection->addRawHandler($handler);
+            $this->_connection->addNumericHandler($handler);
 
-            $handler = new Erebot_RawHandler(
-                new Erebot_Callable(array($this, 'handleRaw')),
-                $this->getRawRef('RPL_LUSERCLIENT')
+            $handler = new Erebot_NumericHandler(
+                new Erebot_Callable(array($this, 'handleNumeric')),
+                $this->getNumRef('RPL_LUSERCLIENT')
             );
-            $this->_connection->addRawHandler($handler);
+            $this->_connection->addNumericHandler($handler);
         }
     }
 
     /**
-     * Handles raw numeric events.
+     * Handles numeric events.
      *
-     * \param Erebot_Interface_RawHandler $handler
+     * \param Erebot_Interface_NumericHandler $handler
      *      Handler that triggered this event.
      *
-     * \param Erebot_Interface_Event_Raw $raw
-     *      The raw event to handle.
+     * \param Erebot_Interface_Event_Numeric $numeric
+     *      The numeric event to handle.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function handleRaw(
-        Erebot_Interface_RawHandler $handler,
-        Erebot_Interface_Event_Raw  $raw
+    public function handleNumeric(
+        Erebot_Interface_NumericHandler $handler,
+        Erebot_Interface_Event_Numeric  $numeric
     )
     {
-        $rawCode    = $raw->getRaw();
+        $code       = $numeric->getCode();
         $profile    = $this->_connection->getNumericProfile();
-        if ($rawCode == $profile['RPL_LUSERCLIENT'] && !$this->_parsed) {
+        if ($code == $profile['RPL_LUSERCLIENT'] && !$this->_parsed) {
             $this->_parsed = TRUE;
             $event = new Erebot_Event_ServerCapabilities(
                 $this->_connection,
@@ -160,10 +160,10 @@ extends Erebot_Module_Base
             return;
         }
 
-        if ($rawCode != $profile['RPL_ISUPPORT'])
+        if ($code != $profile['RPL_ISUPPORT'])
             return;
 
-        $tokens = explode(' ', $raw->getText());
+        $tokens = explode(' ', $numeric->getText());
         foreach ($tokens as &$token) {
             if (substr($token, 0, 1) == ':')
                 break;
@@ -175,11 +175,10 @@ extends Erebot_Module_Base
     }
 
     /**
-     * Parses a token from the 005 raw numeric
-     * event.
+     * Parses a token from the 005 numeric event.
      *
      * \param string $token
-     *      A token from the 005 raw event.
+     *      A token from the 005 numeric event.
      *
      * \retval array
      *      Result of the parsing.

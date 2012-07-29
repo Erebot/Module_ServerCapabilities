@@ -19,10 +19,10 @@
 class   ServerCapabilitiesTest
 extends Erebot_Testenv_Module_TestCase
 {
-    protected function _mockRaw($num, $source, $target, $text)
+    protected function _mockNumeric($num, $source, $target, $text)
     {
         $event = $this->getMock(
-            'Erebot_Interface_Event_Raw',
+            'Erebot_Interface_Event_Numeric',
             array(), array(), '', FALSE, FALSE
         );
 
@@ -32,7 +32,7 @@ extends Erebot_Testenv_Module_TestCase
             ->will($this->returnValue($this->_connection));
         $event
             ->expects($this->any())
-            ->method('getRaw')
+            ->method('getCode')
             ->will($this->returnValue($num));
         $event
             ->expects($this->any())
@@ -66,7 +66,7 @@ extends Erebot_Testenv_Module_TestCase
         $profile
             ->expects($this->any())
             ->method('offsetGet')
-            ->will($this->returnCallback(array($this, 'getRawByName')));
+            ->will($this->returnCallback(array($this, 'getNumericByName')));
 
         $this->_connection
             ->expects($this->any())
@@ -86,22 +86,22 @@ extends Erebot_Testenv_Module_TestCase
         parent::tearDown();
     }
 
-    public function getRawByName($rawName)
+    public function getNumericByName($name)
     {
-        if ($rawName == 'RPL_ISUPPORT')
+        if ($name == 'RPL_ISUPPORT')
             return 5;
     }
 
     public function testISupport()
     {
-        $raw = $this->_mockRaw(
+        $numeric = $this->_mockNumeric(
             005, 'source', 'target',
             'CMDS=KNOCK,MAP,DCCALLOW,USERIP NAMESX SAFELIST HCN '.
             'MAXCHANNELS=20 CHANLIMIT=#:20 MAXLIST=b:60,e:60,I:60 '.
             'NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 '.
             'AWAYLEN=307 MAXTARGETS=20 :are supported by this server'
         );
-        $this->_module->handleRaw($this->_rawHandler, $raw);
+        $this->_module->handleNumeric($this->_numericHandler, $numeric);
         $listExtensions = array(
             Erebot_Module_ServerCapabilities::ELIST_MASK,
             Erebot_Module_ServerCapabilities::ELIST_NEG_MASK,
@@ -163,22 +163,25 @@ extends Erebot_Testenv_Module_TestCase
      */
     public function testSSL1()
     {
-        $raw = $this->_mockRaw(005, 'source', 'target', '');
-        $this->_module->handleRaw($this->_rawHandler, $raw);
+        $numeric = $this->_mockNumeric(005, 'source', 'target', '');
+        $this->_module->handleNumeric($this->_numericHandler, $numeric);
         $this->_module->getSSL();
     }
 
     public function testSSL2()
     {
-        $raw = $this->_mockRaw(005, 'source', 'target', 'SSL=');
-        $this->_module->handleRaw($this->_rawHandler, $raw);
+        $numeric = $this->_mockNumeric(005, 'source', 'target', 'SSL=');
+        $this->_module->handleNumeric($this->_numericHandler, $numeric);
         $this->assertEquals(array(), $this->_module->getSSL());
     }
 
     public function testSSL3()
     {
-        $raw = $this->_mockRaw(005, 'source', 'target', 'SSL=127.0.0.1:7002');
-        $this->_module->handleRaw($this->_rawHandler, $raw);
+        $numeric = $this->_mockNumeric(
+            005, 'source', 'target',
+            'SSL=127.0.0.1:7002'
+        );
+        $this->_module->handleNumeric($this->_numericHandler, $numeric);
         $this->assertEquals(
             array('127.0.0.1' => 7002),
             $this->_module->getSSL()
@@ -187,11 +190,11 @@ extends Erebot_Testenv_Module_TestCase
 
     public function testSSL4()
     {
-        $raw = $this->_mockRaw(
+        $numeric = $this->_mockNumeric(
             005, 'source', 'target',
             'SSL=1.2.3.4:6668;4.3.2.1:6669;*:6660;'
         );
-        $this->_module->handleRaw($this->_rawHandler, $raw);
+        $this->_module->handleNumeric($this->_numericHandler, $numeric);
         $expected = array(
             '1.2.3.4'   => 6668,
             '4.3.2.1'   => 6669,
