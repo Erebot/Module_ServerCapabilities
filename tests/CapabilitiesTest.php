@@ -54,14 +54,14 @@ extends Erebot_Testenv_Module_TestCase
         $this->_module = new Erebot_Module_ServerCapabilities(NULL);
         parent::setUp();
 
-        $profile = $this->getMockForAbstractClass(
+        $profile = $this->getMock(
             'Erebot_NumericProfile_Base',
+            array('offsetGet'),
             array(),
             '',
             FALSE,
             FALSE,
-            TRUE,
-            array('offsetGet')
+            TRUE
         );
         $profile
             ->expects($this->any())
