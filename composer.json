@@ -1,8 +1,8 @@
 {
-    "name": "erebot/erebot-module-servercapabilities",
-    "description": "Erebot module to detect a server's capabilities",
+    "name": "erebot/erebot-module-uno",
+    "description": "Erebot module that provides the Uno game",
     "keywords": ["Erebot", "IRC", "bot", "module"],
-    "homepage": "https://github.com/Erebot/Erebot_Module_ServerCapabilities",
+    "homepage": "https://github.com/Erebot/Erebot_Module_Uno",
     "license": "GPL-3.0+",
     "authors": [
         {
@@ -13,21 +13,28 @@
     ],
     "support": {
         "email": "erebot@erebot.net",
-        "issues": "https://github.com/Erebot/Erebot_Module_ServerCapabilities/issues",
-        "wiki": "http://erebot.github.com/Erebot_Module_ServerCapabilities/",
+        "issues": "https://github.com/Erebot/Erebot_Module_Uno/issues",
+        "wiki": "http://erebot.github.com/Erebot_Module_Uno/",
         "irc": "irc://irc.iiens.net/Erebot",
-        "source": "https://github.com/Erebot/Erebot_Module_ServerCapabilities"
+        "source": "https://github.com/Erebot/Erebot_Module_Uno"
     },
     "repositories": [
         {
-            "type": "pear",
-            "url": "http://pear.php.net"
+            "type": "composer",
+            "url": "http://packages.erebot.net"
         }
     ],
     "require": {
         "php": ">=5.2.2",
-        "erebot/erebot-api": "*",
-        "erebot/erebot-module-triggerregistry": "*"
+        "erebot/triggerregistry-module": "dev-master",
+        "erebot/irctracker-module": "dev-master",
+        "erebot/api": "dev-master",
+        "erebot/installers": "dev-master",
+        "erebot/generic-doc": "dev-master"
+    },
+    "require-dev": {
+        "erebot/buildenv": "dev-master",
+        "erebot/testenv": "dev-master"
     },
     "autoload": {
         "psr-0": {
