@@ -1,8 +1,8 @@
 {
-    "name": "erebot/erebot-module-uno",
-    "description": "Erebot module that provides the Uno game",
+    "name": "erebot/servercapabilities-module",
+    "description": "Erebot module that determines what an IRC server is capable of",
     "keywords": ["Erebot", "IRC", "bot", "module"],
-    "homepage": "https://github.com/Erebot/Erebot_Module_Uno",
+    "homepage": "https://github.com/Erebot/Erebot_Module_ServerCapabilities",
     "license": "GPL-3.0+",
     "authors": [
         {
@@ -13,10 +13,10 @@
     ],
     "support": {
         "email": "erebot@erebot.net",
-        "issues": "https://github.com/Erebot/Erebot_Module_Uno/issues",
-        "wiki": "http://erebot.github.com/Erebot_Module_Uno/",
+        "issues": "https://github.com/Erebot/Erebot_Module_ServerCapabilities/issues",
+        "wiki": "http://erebot.github.com/Erebot_Module_ServerCapabilities/",
         "irc": "irc://irc.iiens.net/Erebot",
-        "source": "https://github.com/Erebot/Erebot_Module_Uno"
+        "source": "https://github.com/Erebot/Erebot_Module_ServerCapabilities"
     },
     "repositories": [
         {
@@ -26,8 +26,6 @@
     ],
     "require": {
         "php": ">=5.2.2",
-        "erebot/triggerregistry-module": "dev-master",
-        "erebot/irctracker-module": "dev-master",
         "erebot/api": "dev-master",
         "erebot/installers": "dev-master",
         "erebot/generic-doc": "dev-master"
