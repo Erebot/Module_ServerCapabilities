@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2b3849a25615a5458e8e9c7c450a19de",
+    "hash": "e4af84fe3a92550cb81a849455ad8f35",
     "packages": [
         {
             "name": "erebot/api",
@@ -68,13 +68,13 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_Module_Skeleton_Doc.git",
-                "reference": "6864d4b0b3ef044836d0a4d26df8b1df933fb91d"
+                "reference": "4420ea26cd7782decf71927282a8db2219016f48"
             },
             "dist": {
                 "type": "tar",
-                "url": "https://packages.erebot.net:943/composer/erebot-generic-doc-6864d4b0b3ef044836d0a4d26df8b1df933fb91d-zip-f1b4ff.tar",
+                "url": "https://packages.erebot.net:943/composer/erebot-generic-doc-4420ea26cd7782decf71927282a8db2219016f48-zip-ca4fc4.tar",
                 "reference": "dev-master",
-                "shasum": "b0efe0dfb3724e8333545f475bf740f896a77c6d"
+                "shasum": "042a600ff95c274a8c187a1ef4c3d313f4d9c82a"
             },
             "require": {
                 "erebot/installers": "dev-master"
@@ -111,7 +111,7 @@
                 "irc": "irc://irc.iiens.net/Erebot",
                 "source": "https://github.com/Erebot/Erebot_Module_Skeleton"
             },
-            "time": "2013-06-27 20:44:06"
+            "time": "2013-07-13 20:12:07"
         },
         {
             "name": "erebot/installers",
@@ -164,130 +164,6 @@
                 "source": "https://github.com/Erebot/Erebot_Installers"
             },
             "time": "2013-06-27 21:08:41"
-        },
-        {
-            "name": "erebot/irctracker-module",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Erebot/Erebot_Module_IrcTracker.git",
-                "reference": "64607f2b2f18ece94db5acf89b86653f69fd0c4e"
-            },
-            "dist": {
-                "type": "tar",
-                "url": "https://packages.erebot.net:943/composer/erebot-irctracker-module-64607f2b2f18ece94db5acf89b86653f69fd0c4e-zip-fc165c.tar",
-                "reference": "dev-master",
-                "shasum": "9c249659745e921783e323e420926d074447edfa"
-            },
-            "require": {
-                "erebot/api": "dev-master",
-                "erebot/generic-doc": "dev-master",
-                "erebot/installers": "dev-master",
-                "php": ">=5.2.2"
-            },
-            "require-dev": {
-                "erebot/buildenv": "dev-master",
-                "erebot/testenv": "dev-master"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Erebot": "src/"
-                }
-            },
-            "license": [
-                "GPL-3.0+"
-            ],
-            "authors": [
-                {
-                    "name": "François Poirotte",
-                    "email": "clicky@erebot.net",
-                    "role": "lead"
-                }
-            ],
-            "description": "Erebot module to track users through nick changes, etc.",
-            "homepage": "https://github.com/Erebot/Erebot_Module_IrcTracker",
-            "keywords": [
-                "Erebot",
-                "IRC",
-                "bot",
-                "module"
-            ],
-            "support": {
-                "email": "erebot@erebot.net",
-                "issues": "https://github.com/Erebot/Erebot_Module_IrcTracker/issues",
-                "wiki": "http://erebot.github.com/Erebot_Module_IrcTracker/",
-                "irc": "irc://irc.iiens.net/Erebot",
-                "source": "https://github.com/Erebot/Erebot_Module_IrcTracker"
-            },
-            "time": "2013-06-28 22:04:26"
-        },
-        {
-            "name": "erebot/triggerregistry-module",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Erebot/Erebot_Module_TriggerRegistry.git",
-                "reference": "a90c504f05a14f5b8287f34deb7c233fd71e6e93"
-            },
-            "dist": {
-                "type": "tar",
-                "url": "https://packages.erebot.net:943/composer/erebot-triggerregistry-module-a90c504f05a14f5b8287f34deb7c233fd71e6e93-zip-ecc255.tar",
-                "reference": "dev-master",
-                "shasum": "bb872872df2fb47107c94c8ea18ea08c18f0a040"
-            },
-            "require": {
-                "erebot/api": "dev-master",
-                "erebot/generic-doc": "dev-master",
-                "erebot/installers": "dev-master",
-                "php": ">=5.2.2"
-            },
-            "require-dev": {
-                "erebot/buildenv": "dev-master",
-                "erebot/testenv": "dev-master"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Erebot": "src/"
-                }
-            },
-            "license": [
-                "GPL-3.0+"
-            ],
-            "authors": [
-                {
-                    "name": "François Poirotte",
-                    "email": "clicky@erebot.net",
-                    "role": "lead"
-                }
-            ],
-            "description": "Erebot module that can be used to register triggers",
-            "homepage": "https://github.com/Erebot/Erebot_Module_TriggerRegistry",
-            "keywords": [
-                "Erebot",
-                "IRC",
-                "bot",
-                "module"
-            ],
-            "support": {
-                "email": "erebot@erebot.net",
-                "issues": "https://github.com/Erebot/Erebot_Module_TriggerRegistry/issues",
-                "wiki": "http://erebot.github.com/Erebot_Module_TriggerRegistry/",
-                "irc": "irc://irc.iiens.net/Erebot",
-                "source": "https://github.com/Erebot/Erebot_Module_TriggerRegistry"
-            },
-            "time": "2013-06-28 20:59:38"
         }
     ],
     "packages-dev": [
@@ -297,15 +173,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_Buildenv.git",
-                "reference": "03c621d56756a2412065ba6094034f5ca22f31c8"
+                "reference": "658e6515fbb47f93832019dfdb4857e7b93ff9bb"
             },
             "dist": {
                 "type": "tar",
-                "url": "https://packages.erebot.net:943/composer/erebot-buildenv-03c621d56756a2412065ba6094034f5ca22f31c8-zip-46b166.tar",
+                "url": "https://packages.erebot.net:943/composer/erebot-buildenv-658e6515fbb47f93832019dfdb4857e7b93ff9bb-zip-443f35.tar",
                 "reference": "dev-master",
-                "shasum": "0b97c2b2ef495c5be8b53ee7d508e8ccdbdde46c"
+                "shasum": "fa49523f82d7f0c0fb5266146fde1012a8c992e2"
             },
             "require": {
+                "ext-xsl": "*",
                 "phing/phing": ">=2.4.3",
                 "php": ">=5.2.2"
             },
@@ -344,7 +221,7 @@
                 "irc": "irc://irc.iiens.net/Erebot",
                 "source": "https://github.com/Erebot/Erebot_Buildenv"
             },
-            "time": "2013-06-24 21:53:45"
+            "time": "2013-07-17 12:48:51"
         },
         {
             "name": "erebot/testenv",
@@ -451,8 +328,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "erebot/triggerregistry-module": 20,
-        "erebot/irctracker-module": 20,
         "erebot/api": 20,
         "erebot/installers": 20,
         "erebot/generic-doc": 20,
