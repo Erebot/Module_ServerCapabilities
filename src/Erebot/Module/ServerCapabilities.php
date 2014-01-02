@@ -129,10 +129,10 @@ extends Erebot_Module_Base
                 $this->getNumRef('RPL_LUSERCLIENT')
             );
             $this->_connection->addNumericHandler($handler);
-        }
 
-        $cls = $this->getFactory('!Callable');
-        $this->registerHelpMethod(new $cls(array($this, 'getHelp')));
+            $cls = $this->getFactory('!Callable');
+            $this->registerHelpMethod(new $cls(array($this, 'getHelp')));
+        }
     }
 
     /**

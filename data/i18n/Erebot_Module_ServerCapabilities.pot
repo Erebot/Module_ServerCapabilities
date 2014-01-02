@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Erebot_Module_ServerCapabilities dev-master\n"
 "Report-Msgid-Bugs-To: i18n@erebot.net\n"
-"POT-Creation-Date: 2013-08-15 14:41+0200\n"
+"POT-Creation-Date: 2014-01-03 00:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,100 +16,106 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 828
+# File: src/Erebot/Module/ServerCapabilities.php, line: 870
 msgid "Bad channel list ID"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 512
+# File: src/Erebot/Module/ServerCapabilities.php, line: 554
 msgid "Bad channel name"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1229
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1271
 msgid "Bad prefix"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1275
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1317
 msgid "Bad standard name"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 840
+# File: src/Erebot/Module/ServerCapabilities.php, line: 882
 msgid "Excepts are not available on this server"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1321
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1345
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1363
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1387
 msgid "Extended bans are not supported on this server"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 866
+# File: src/Erebot/Module/ServerCapabilities.php, line: 908
 msgid "Invalid channel list ID"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1087
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1129
 msgid "Invalid command"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1188
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1230
 msgid "Invalid data received"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 577
-# File: src/Erebot/Module/ServerCapabilities.php, line: 612
+# File: src/Erebot/Module/ServerCapabilities.php, line: 619
+# File: src/Erebot/Module/ServerCapabilities.php, line: 654
 msgid "Invalid list type"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 887
-# File: src/Erebot/Module/ServerCapabilities.php, line: 934
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1035
+# File: src/Erebot/Module/ServerCapabilities.php, line: 929
+# File: src/Erebot/Module/ServerCapabilities.php, line: 976
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1077
 msgid "Invalid mode"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 986
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1028
 msgid "Invalid prefix"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 472
+# File: src/Erebot/Module/ServerCapabilities.php, line: 514
 msgid "Invalid status"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 692
 # File: src/Erebot/Module/ServerCapabilities.php, line: 734
+# File: src/Erebot/Module/ServerCapabilities.php, line: 776
 msgid "Invalid text type"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 854
+# File: src/Erebot/Module/ServerCapabilities.php, line: 896
 msgid "Invites are not available on this server"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1204
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1246
 msgid "No SSL information available"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 774
+# File: src/Erebot/Module/ServerCapabilities.php, line: 816
 msgid "No charset specified"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 800
+# File: src/Erebot/Module/ServerCapabilities.php, line: 842
 msgid "No network declared"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 956
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1052
+# File: src/Erebot/Module/ServerCapabilities.php, line: 998
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1094
 msgid "No such mode"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1007
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1049
 msgid "No such prefix"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 370
+# File: src/Erebot/Module/ServerCapabilities.php, line: 412
 msgid "Not a valid command name"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1196
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1238
 msgid "Not a valid port"
 msgstr ""
 #
-# File: src/Erebot/Module/ServerCapabilities.php, line: 1242
+# File: src/Erebot/Module/ServerCapabilities.php, line: 1284
 msgid "Safe channels are not available on this server"
+msgstr ""
+#
+# File: src/Erebot/Module/ServerCapabilities.php, line: 168
+msgid ""
+"This module does not provide any command, but can be used by other modules to "
+"determine an IRC server's capabilities."
 msgstr ""
