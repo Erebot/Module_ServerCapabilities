@@ -20,13 +20,12 @@
     },
     "require": {
         "php": ">=5.2.2",
-        "erebot/api": "dev-master",
-        "erebot/installers": "dev-master",
-        "erebot/generic-doc": "dev-master"
+        "erebot/api": "~0.6.0",
+        "erebot/generic-doc": "~0.1.0"
     },
     "require-dev": {
-        "erebot/buildenv": "dev-master",
-        "erebot/testenv": "dev-master"
+        "erebot/buildenv": "~1.0",
+        "erebot/testenv": "~1.0"
     },
     "autoload": {
         "psr-0": {

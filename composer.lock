@@ -3,27 +3,27 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1863e3d3c732e6f584e55e71931a42a4",
+    "hash": "077aead1864b2d5487d858833cc4e459",
     "packages": [
         {
             "name": "erebot/api",
-            "version": "dev-master",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_API.git",
-                "reference": "9835eed46286f0e047c07b18812c9867fb459730"
+                "reference": "f988da9be30c1a41d8586820729d838f1d3fd0dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Erebot_API/zipball/9835eed46286f0e047c07b18812c9867fb459730",
-                "reference": "9835eed46286f0e047c07b18812c9867fb459730",
+                "url": "https://api.github.com/repos/Erebot/Erebot_API/zipball/f988da9be30c1a41d8586820729d838f1d3fd0dc",
+                "reference": "f988da9be30c1a41d8586820729d838f1d3fd0dc",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.2"
             },
             "require-dev": {
-                "erebot/buildenv": "dev-master"
+                "erebot/buildenv": "~1.0.0"
             },
             "type": "library",
             "extra": {
@@ -54,24 +54,24 @@
                 "bot",
                 "irc"
             ],
-            "time": "2013-10-20 20:44:46"
+            "time": "2014-01-02 11:03:59"
         },
         {
             "name": "erebot/generic-doc",
-            "version": "dev-master",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_Module_Skeleton_Doc.git",
-                "reference": "0d09560ac8a65f6522a65b5155a636ee1be76760"
+                "reference": "a211b4d8957e018916fd52ba5d6771ce7aedb4ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Erebot_Module_Skeleton_Doc/zipball/0d09560ac8a65f6522a65b5155a636ee1be76760",
-                "reference": "0d09560ac8a65f6522a65b5155a636ee1be76760",
+                "url": "https://api.github.com/repos/Erebot/Erebot_Module_Skeleton_Doc/zipball/a211b4d8957e018916fd52ba5d6771ce7aedb4ad",
+                "reference": "a211b4d8957e018916fd52ba5d6771ce7aedb4ad",
                 "shasum": ""
             },
             "require": {
-                "erebot/installers": "dev-master"
+                "erebot/installers": "*"
             },
             "type": "erebot-generic-doc",
             "extra": {
@@ -99,11 +99,11 @@
                 "documentation",
                 "irc"
             ],
-            "time": "2013-10-20 20:35:00"
+            "time": "2014-01-01 20:30:57"
         },
         {
             "name": "erebot/installers",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_Installers.git",
@@ -152,7 +152,7 @@
     "packages-dev": [
         {
             "name": "erebot/buildenv",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_Buildenv.git",
@@ -203,7 +203,7 @@
         },
         {
             "name": "erebot/testenv",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_Testenv.git",
@@ -299,13 +299,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "erebot/api": 20,
-        "erebot/installers": 20,
-        "erebot/generic-doc": 20,
-        "erebot/buildenv": 20,
-        "erebot/testenv": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": {
         "php": ">=5.2.2"
     },
