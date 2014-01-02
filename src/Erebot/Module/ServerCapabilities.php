@@ -130,6 +130,48 @@ extends Erebot_Module_Base
             );
             $this->_connection->addNumericHandler($handler);
         }
+
+        $cls = $this->getFactory('!Callable');
+        $this->registerHelpMethod(new $cls(array($this, 'getHelp')));
+    }
+
+    /**
+     * Provides help about this module.
+     *
+     * \param Erebot_Interface_Event_Base_TextMessage $event
+     *      Some help request.
+     *
+     * \param Erebot_Interface_TextWrapper $words
+     *      Parameters passed with the request. This is the same
+     *      as this module's name when help is requested on the
+     *      module itself (in opposition with help on a specific
+     *      command provided by the module).
+     */
+    public function getHelp(
+        Erebot_Interface_Event_Base_TextMessage $event,
+        Erebot_Interface_TextWrapper            $words
+    )
+    {
+        if ($event instanceof Erebot_Interface_Event_Base_Private) {
+            $target = $event->getSource();
+            $chan   = NULL;
+        }
+        else
+            $target = $chan = $event->getChan();
+
+        $fmt        = $this->getFormatter($chan);
+        $moduleName = strtolower(get_class());
+        $nbArgs     = count($words);
+
+        if ($nbArgs == 1 && $words[0] == $moduleName) {
+            $msg = $fmt->_(
+                "This module does not provide any command, but ".
+                "can be used by other modules to determine ".
+                "an IRC server's capabilities."
+            );
+            $this->sendMessage($target, $msg);
+            return TRUE;
+        }
     }
 
     /**
