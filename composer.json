@@ -24,7 +24,7 @@
         "erebot/generic-doc": "~0.1.0"
     },
     "require-dev": {
-        "erebot/buildenv": "~1.0",
+        "erebot/buildenv": "~1.1",
         "erebot/testenv": "~1.0"
     },
     "autoload": {
