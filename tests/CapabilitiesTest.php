@@ -17,7 +17,7 @@
 */
 
 abstract class  TextWrapper
-implements      Erebot_Interface_TextWrapper
+implements      \Erebot\Interfaces\TextWrapper
 {
     private $_chunks;
 
@@ -55,7 +55,7 @@ extends Erebot_Testenv_Module_TestCase
     protected function _mockNumeric($num, $source, $target, $text)
     {
         $event = $this->getMock(
-            'Erebot_Interface_Event_Numeric',
+            '\\Erebot\\Interfaces\\Event\\Numeric',
             array(), array(), '', FALSE, FALSE
         );
 
@@ -84,11 +84,11 @@ extends Erebot_Testenv_Module_TestCase
 
     public function setUp()
     {
-        $this->_module = new Erebot_Module_ServerCapabilities(NULL);
+        $this->_module = new \Erebot\Module\ServerCapabilities(NULL);
         parent::setUp();
 
         $profile = $this->getMock(
-            'Erebot_NumericProfile_Base',
+            '\\Erebot\\NumericProfile\\Base',
             array('offsetGet'),
             array(),
             '',
@@ -106,22 +106,22 @@ extends Erebot_Testenv_Module_TestCase
             ->method('getNumericProfile')
             ->will($this->returnValue($profile));
 
-        $this->_module->reload(
+        $this->_module->reloadModule(
             $this->_connection,
-            Erebot_Module_Base::RELOAD_MEMBERS |
-            Erebot_Module_Base::RELOAD_INIT
+            \Erebot\Module\Base::RELOAD_MEMBERS |
+            \Erebot\Module\Base::RELOAD_INIT
         );
     }
 
     public function tearDown()
     {
-        $this->_module->unload();
+        $this->_module->unloadModule();
         parent::tearDown();
     }
 
     public function getNumericByName($name)
     {
-        if ($name == 'RPL_ISUPPORT')
+        if ($name === 'RPL_ISUPPORT')
             return 5;
     }
 
@@ -136,11 +136,11 @@ extends Erebot_Testenv_Module_TestCase
         );
         $this->_module->handleNumeric($this->_numericHandler, $numeric);
         $listExtensions = array(
-            Erebot_Module_ServerCapabilities::ELIST_MASK,
-            Erebot_Module_ServerCapabilities::ELIST_NEG_MASK,
-            Erebot_Module_ServerCapabilities::ELIST_USERS,
-            Erebot_Module_ServerCapabilities::ELIST_CREATION,
-            Erebot_Module_ServerCapabilities::ELIST_TOPIC,
+            \Erebot\Module\ServerCapabilities::ELIST_MASK,
+            \Erebot\Module\ServerCapabilities::ELIST_NEG_MASK,
+            \Erebot\Module\ServerCapabilities::ELIST_USERS,
+            \Erebot\Module\ServerCapabilities::ELIST_CREATION,
+            \Erebot\Module\ServerCapabilities::ELIST_TOPIC,
         );
         foreach ($listExtensions as $ext)
             $this->assertEquals(FALSE, $this->_module->hasListExtension($ext));
@@ -165,34 +165,48 @@ extends Erebot_Testenv_Module_TestCase
         $this->assertEquals(FALSE, $this->_module->isChannel('&foo'));
         $this->assertEquals(FALSE, $this->_module->isChannel('!foo'));
         $this->assertEquals(60, $this->_module->getMaxListSize(
-            Erebot_Module_ServerCapabilities::LIST_BANS
+            \Erebot\Module\ServerCapabilities::LIST_BANS
         ));
-#        $this->assertEquals(60, $this->_module->getMaxListSize(
-#            Erebot_Module_ServerCapabilities::LIST_EXCEPTS
-#        ));
-#        $this->assertEquals(60, $this->_module->getMaxListSize(
-#            Erebot_Module_ServerCapabilities::LIST_INVITES
-#        ));
         $this->assertEquals(NULL, $this->_module->getMaxListSize(
-            Erebot_Module_ServerCapabilities::LIST_SILENCES
+            \Erebot\Module\ServerCapabilities::LIST_SILENCES
         ));
         $this->assertEquals(20, $this->_module->getChanLimit('#foo'));
-        try {
-            $this->assertEquals(-1, $this->_module->getChanLimit('&foo'));
-            $this->fail('Expected an exception');
-        }
-        catch (Erebot_InvalidValueException $e) {
-        }
-        try {
-            $this->assertEquals(-1, $this->_module->getChanLimit('!foo'));
-            $this->fail('Expected an exception');
-        }
-        catch (Erebot_InvalidValueException $e) {
-        }
     }
 
     /**
-     * @expectedException Erebot_NotFoundException
+     * @expectedException \Erebot\InvalidValueException
+     */
+    public function testISupport2()
+    {
+        $numeric = $this->_mockNumeric(
+            005, 'source', 'target',
+            'CMDS=KNOCK,MAP,DCCALLOW,USERIP NAMESX SAFELIST HCN '.
+            'MAXCHANNELS=20 CHANLIMIT=#:20 MAXLIST=b:60,e:60,I:60 '.
+            'NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 '.
+            'AWAYLEN=307 MAXTARGETS=20 :are supported by this server'
+        );
+        $this->_module->handleNumeric($this->_numericHandler, $numeric);
+        $this->assertEquals(-1, $this->_module->getChanLimit('&foo'));
+    }
+
+    /**
+     * @expectedException \Erebot\InvalidValueException
+     */
+    public function testISupport3()
+    {
+        $numeric = $this->_mockNumeric(
+            005, 'source', 'target',
+            'CMDS=KNOCK,MAP,DCCALLOW,USERIP NAMESX SAFELIST HCN '.
+            'MAXCHANNELS=20 CHANLIMIT=#:20 MAXLIST=b:60,e:60,I:60 '.
+            'NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 '.
+            'AWAYLEN=307 MAXTARGETS=20 :are supported by this server'
+        );
+        $this->_module->handleNumeric($this->_numericHandler, $numeric);
+        $this->assertEquals(-1, $this->_module->getChanLimit('!foo'));
+    }
+
+    /**
+     * @expectedException \Erebot\NotFoundException
      */
     public function testSSL1()
     {
@@ -245,10 +259,10 @@ extends Erebot_Testenv_Module_TestCase
             FALSE,
             FALSE
         );
-        $words = new $wordsClass(strtolower('Erebot_Module_ServerCapabilities'));
+        $words = new $wordsClass(strtolower('Erebot\\Module\\ServerCapabilities'));
 
         $event = $this->getMock(
-            'Erebot_Interface_Event_ChanText',
+            '\\Erebot\\Interfaces\\Event\\ChanText',
             array(), array(), '', FALSE, FALSE
         );
         $event

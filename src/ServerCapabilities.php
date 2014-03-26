@@ -16,13 +16,14 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace Erebot\Module;
+
 /**
  * \brief
  *      A module that can determine what an IRC server
  *      is capable of.
  */
-class   Erebot_Module_ServerCapabilities
-extends Erebot_Module_Base
+class ServerCapabilities extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpEnabled
 {
     /// Refers to the list of bans.
     const LIST_BANS         = 0;
@@ -89,17 +90,17 @@ extends Erebot_Module_Base
 
 
     /// Modes/commands/exteions/options supported by this IRC server.
-    protected $_supported;
+    protected $supported;
 
     /// Whether server capabilities have been parsed yet or not.
-    protected $_parsed;
+    protected $parsed;
 
 
     /**
      * This method is called whenever the module is (re)loaded.
      *
      * \param int $flags
-     *      A bitwise OR of the Erebot_Module_Base::RELOAD_*
+     *      A bitwise OR of the Erebot::Module::Base::RELOAD_*
      *      constants. Your method should take proper actions
      *      depending on the value of those flags.
      *
@@ -107,57 +108,54 @@ extends Erebot_Module_Base
      *      See the documentation on individual RELOAD_*
      *      constants for a list of possible values.
      */
-    public function _reload($flags)
+    public function reload($flags)
     {
-        if ($this->_channel !== NULL)
+        if ($this->channel !== null) {
             return;
+        }
 
         if ($flags & self::RELOAD_INIT) {
-            $this->_supported   = array();
-            $this->_parsed      = FALSE;
+            $this->supported    = array();
+            $this->parsed       = false;
         }
 
         if ($flags & self::RELOAD_HANDLERS) {
-            $handler = new Erebot_NumericHandler(
-                new Erebot_Callable(array($this, 'handleNumeric')),
+            $handler = new \Erebot\NumericHandler(
+                new \Erebot\CallableWrapper(array($this, 'handleNumeric')),
                 $this->getNumRef('RPL_ISUPPORT')
             );
-            $this->_connection->addNumericHandler($handler);
+            $this->connection->addNumericHandler($handler);
 
-            $handler = new Erebot_NumericHandler(
-                new Erebot_Callable(array($this, 'handleNumeric')),
+            $handler = new \Erebot\NumericHandler(
+                new \Erebot\CallableWrapper(array($this, 'handleNumeric')),
                 $this->getNumRef('RPL_LUSERCLIENT')
             );
-            $this->_connection->addNumericHandler($handler);
-
-            $cls = $this->getFactory('!Callable');
-            $this->registerHelpMethod(new $cls(array($this, 'getHelp')));
+            $this->connection->addNumericHandler($handler);
         }
     }
 
     /**
      * Provides help about this module.
      *
-     * \param Erebot_Interface_Event_Base_TextMessage $event
+     * \param Erebot::Interfaces::Event::Base::TextMessage $event
      *      Some help request.
      *
-     * \param Erebot_Interface_TextWrapper $words
+     * \param Erebot::Interfaces::TextWrapper $words
      *      Parameters passed with the request. This is the same
      *      as this module's name when help is requested on the
      *      module itself (in opposition with help on a specific
      *      command provided by the module).
      */
     public function getHelp(
-        Erebot_Interface_Event_Base_TextMessage $event,
-        Erebot_Interface_TextWrapper            $words
-    )
-    {
-        if ($event instanceof Erebot_Interface_Event_Base_Private) {
+        \Erebot\Interfaces\Event\Base\TextMessage $event,
+        \Erebot\Interfaces\TextWrapper $words
+    ) {
+        if ($event instanceof \Erebot\Interfaces\Event\Base\PrivateMessage) {
             $target = $event->getSource();
-            $chan   = NULL;
-        }
-        else
+            $chan   = null;
+        } else {
             $target = $chan = $event->getChan();
+        }
 
         $fmt        = $this->getFormatter($chan);
         $moduleName = strtolower(get_class());
@@ -169,48 +167,49 @@ extends Erebot_Module_Base
                 "an IRC server's capabilities."
             );
             $this->sendMessage($target, $msg);
-            return TRUE;
+            return true;
         }
     }
 
     /**
      * Handles numeric events.
      *
-     * \param Erebot_Interface_NumericHandler $handler
+     * \param Erebot::Interfaces::NumericHandler $handler
      *      Handler that triggered this event.
      *
-     * \param Erebot_Interface_Event_Numeric $numeric
+     * \param Erebot::Interfaces::Event::Numeric $numeric
      *      The numeric event to handle.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handleNumeric(
-        Erebot_Interface_NumericHandler $handler,
-        Erebot_Interface_Event_Numeric  $numeric
-    )
-    {
+        \Erebot\Interfaces\NumericHandler $handler,
+        \Erebot\Interfaces\Event\Numeric $numeric
+    ) {
         $code       = $numeric->getCode();
-        $profile    = $this->_connection->getNumericProfile();
-        if ($code == $profile['RPL_LUSERCLIENT'] && !$this->_parsed) {
-            $this->_parsed = TRUE;
-            $event = new Erebot_Event_ServerCapabilities(
-                $this->_connection,
+        $profile    = $this->connection->getNumericProfile();
+        if ($code === $profile['RPL_LUSERCLIENT'] && !$this->parsed) {
+            $this->parsed = true;
+            $event = new \Erebot\Event\ServerCapabilities(
+                $this->connection,
                 $this
             );
-            $this->_connection->dispatch($event);
+            $this->connection->dispatch($event);
             return;
         }
 
-        if ($code != $profile['RPL_ISUPPORT'])
+        if ($code !== $profile['RPL_ISUPPORT']) {
             return;
+        }
 
         $tokens = explode(' ', $numeric->getText());
         foreach ($tokens as &$token) {
-            if (substr($token, 0, 1) == ':')
+            if (substr($token, 0, 1) === ':') {
                 break;
+            }
 
-            $supported          = $this->_parseToken($token);
-            $this->_supported = array_merge($this->_supported, $supported);
+            $supported = $this->parseToken($token);
+            $this->supported = array_merge($this->supported, $supported);
         }
         unset($token);
     }
@@ -224,35 +223,38 @@ extends Erebot_Module_Base
      * \retval array
      *      Result of the parsing.
      */
-    protected function _parseToken($token)
+    protected function parseToken($token)
     {
         $pos = strpos($token, '=');
-        if ($pos === FALSE)
-            return array(strtoupper($token) => TRUE);
+        if ($pos === false) {
+            return array(strtoupper($token) => true);
+        }
 
         $name   = strtoupper(substr($token, 0, $pos));
         $value  = substr($token, $pos + 1);
 
-        if ($value == '')
-            return array(strtoupper($name) => TRUE);
+        if ($value == '') {
+            // No value given after '='.
+            return array(strtoupper($name) => true);
+        }
 
-        $subs   = explode(',', $value);
+        $subs = explode(',', $value);
         if (count($subs) == 1) {
             $colonPos       = strpos($subs[0], ':');
             $semicolonPos   = strpos(trim($subs[0], ';'), ';');
-            if ($colonPos === FALSE) {
+            if ($colonPos === false) {
                 $subs   = explode(';', $value);
-                if (count($subs) == 1)
+                if (count($subs) == 1) {
                     return array($name => $value);
-            }
-            else if ($semicolonPos !== FALSE && $semicolonPos > $colonPos) {
+                }
+            } elseif ($semicolonPos !== false && $semicolonPos > $colonPos) {
                 $subs = explode(';', trim($subs[0], ';'));
             }
         }
 
         $res = array();
         foreach ($subs as $sub) {
-            if (strpos($sub, ':') === FALSE) {
+            if (strpos($sub, ':') === false) {
                 $res[$name][] = $sub;
                 continue;
             }
@@ -272,20 +274,22 @@ extends Erebot_Module_Base
      *
      * \param opaque $extension
      *      The extension for which support must be tested.
-     *      Use the Erebot_Module_ServerCapabilities::ELIST_*
+     *      Use the Erebot::Module::ServerCapabilities::ELIST_*
      *      series of constant for this parameter.
      *
      * \retval bool
-     *      TRUE if the given $extension is supported,
-     *      FALSE otherwise.
+     *      \b true if the given $extension is supported,
+     *      \b false otherwise.
      */
     public function hasListExtension($extension)
     {
-        if (!isset($this->_supported['ELIST']))
-            return FALSE;
-        if (!is_string($extension) || strlen($extension) != 1)
-            return FALSE;
-        return (strpos($this->_supported['ELIST'], $extension) !== FALSE);
+        if (!isset($this->supported['ELIST'])) {
+            return false;
+        }
+        if (!is_string($extension) || strlen($extension) != 1) {
+            return false;
+        }
+        return (strpos($this->supported['ELIST'], $extension) !== false);
     }
 
     /**
@@ -300,12 +304,12 @@ extends Erebot_Module_Base
      * send the highest mode of each user in reply to /NAMES.
      *
      * \retval bool
-     *      TRUE if the server supports the NAMESX extension,
-     *      FALSE otherwise.
+     *      \b true if the server supports the NAMESX extension,
+     *      \b false otherwise.
      */
     public function hasExtendedNames()
     {
-        return isset($this->_supported['NAMESX']);
+        return isset($this->supported['NAMESX']);
     }
 
     /**
@@ -320,12 +324,12 @@ extends Erebot_Module_Base
      * send the user's nickname in reply to /NAMES.
      *
      * \retval bool
-     *      TRUE if the server supports the UHNAMES extension,
-     *      FALSE otherwise.
+     *      \b true if the server supports the UHNAMES extension,
+     *      \b false otherwise.
      */
     public function hasUserHostNames()
     {
-        return isset($this->_supported['UHNAMES']);
+        return isset($this->supported['UHNAMES']);
     }
 
     /**
@@ -335,12 +339,12 @@ extends Erebot_Module_Base
      * a message.
      *
      * \retval bool
-     *      TRUE if the server gives extra penalty for
-     *      certain commands, FALSE otherwise.
+     *      \b true if the server gives extra penalty for
+     *      certain commands, \b false otherwise.
      */
     public function hasExtraPenalty()
     {
-        return isset($this->_supported['PENALTY']);
+        return isset($this->supported['PENALTY']);
     }
 
     /**
@@ -348,12 +352,12 @@ extends Erebot_Module_Base
      * nickname on its own.
      *
      * \retval bool
-     *      TRUE if the server may choose to change a user's
-     *      nickname at its own discretion, FALSE otherwise.
+     *      \b true if the server may choose to change a user's
+     *      nickname at its own discretion, \b false otherwise.
      */
     public function hasForcedNickChange()
     {
-        return isset($this->_supported['FNC']);
+        return isset($this->supported['FNC']);
     }
 
     /**
@@ -367,12 +371,12 @@ extends Erebot_Module_Base
      * the user's IP address in connect/exit notices.
      *
      * \retval bool
-     *      TRUE if the server supports the HCN extension,
-     *      FALSE otherwise.
+     *      \b true if the server supports the HCN extension,
+     *      \b false otherwise.
      */
     public function hasHybridConnectNotice()
     {
-        return isset($this->_supported['HCN']);
+        return isset($this->supported['HCN']);
     }
 
     /**
@@ -383,10 +387,10 @@ extends Erebot_Module_Base
      *      Name of the command whose support must be tested.
      *
      * \retval bool
-     *      TRUE if the given command is supported,
-     *      FALSE otherwise.
+     *      \b true if the given command is supported,
+     *      \b false otherwise.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      The given $cmdName is not a valid command name.
      *
      * \note
@@ -395,7 +399,7 @@ extends Erebot_Module_Base
      *      by IRC clients. Basic commands such as those
      *      described in RFC 1459 and its successors need
      *      not be tested (this method will indeed return
-     *      FALSE for such commands).
+     *      \b false for such commands).
      *
      * \note
      *      Many commands actually have separate methods
@@ -406,8 +410,8 @@ extends Erebot_Module_Base
     public function hasCommand($cmdName)
     {
         if (!is_string($cmdName)) {
-            $fmt = $this->getFormatter(NULL);
-            throw new Erebot_InvalidValueException(
+            $fmt = $this->getFormatter(null);
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Not a valid command name')
             );
         }
@@ -426,17 +430,18 @@ extends Erebot_Module_Base
             'ISON',
         );
 
-        if ($this->supportsStandard('RFC2812') &&
-            in_array($cmdName, $rfcFeatures))
-            return TRUE;
+        if ($this->supportsStandard('RFC2812') && in_array($cmdName, $rfcFeatures)) {
+            return true;
+        }
 
-        if (isset($this->_supported[$cmdName]))
-            return TRUE;
+        if (isset($this->supported[$cmdName])) {
+            return true;
+        }
 
-        if (isset($this->_supported['CMDS']) &&
-            in_array($cmdName, $this->_supported['CMDS']))
-            return TRUE;
-        return FALSE;
+        if (isset($this->supported['CMDS']) && in_array($cmdName, $this->supported['CMDS'])) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -445,12 +450,12 @@ extends Erebot_Module_Base
      * the send queue to overflow.
      *
      * \retval bool
-     *      TRUE if replies to LIST commands may be
-     *      split in several messages, FALSE otherwise.
+     *      \b true if replies to LIST commands may be
+     *      split in several messages, \b false otherwise.
      */
     public function hasSafeList()
     {
-        return isset($this->_supported['SAFELIST']);
+        return isset($this->supported['SAFELIST']);
     }
 
     /**
@@ -459,13 +464,13 @@ extends Erebot_Module_Base
      * connected for long enough.
      *
      * \retval bool
-     *      TRUE if the server may deny access to channel
+     *      \b true if the server may deny access to channel
      *      lists until a certain amount of time has been
-     *      spent connected, FALSE otherwise.
+     *      spent connected, \b false otherwise.
      */
     public function hasSecureList()
     {
-        return isset($this->_supported['SECURELIST']);
+        return isset($this->supported['SECURELIST']);
     }
 
     /**
@@ -475,12 +480,12 @@ extends Erebot_Module_Base
      * and reconnect using a TLS encrypted connection.
      *
      * \retval bool
-     *      TRUE if the server support TLS encrypted
-     *      connections, FALSE otherwise.
+     *      \b true if the server support TLS encrypted
+     *      connections, \b false otherwise.
      */
     public function hasStartTLS()
     {
-        return isset($this->_supported['STARTTLS']);
+        return isset($this->supported['STARTTLS']);
     }
 
     /**
@@ -508,25 +513,27 @@ extends Erebot_Module_Base
     public function hasStatusMsg($status)
     {
         if (!is_string($status) || strlen($status) != 1) {
-            $fmt = $this->getFormatter(NULL);
-            throw new Erebot_InvalidValueException(
+            $fmt = $this->getFormatter(null);
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Invalid status')
             );
         }
 
-        if (isset($this->_supported['STATUSMSG']) &&
-            is_string($this->_supported['STATUSMSG'])) {
-            if (strpos($this->_supported['STATUSMSG'], $status) !== FALSE)
-                return TRUE;
+        if (isset($this->supported['STATUSMSG']) && is_string($this->supported['STATUSMSG'])) {
+            if (strpos($this->supported['STATUSMSG'], $status) !== false) {
+                return true;
+            }
         }
 
-        if ($status == '+' && isset($this->_supported['WALLVOICES']))
-            return TRUE;
+        if ($status === '+' && isset($this->supported['WALLVOICES'])) {
+            return true;
+        }
 
-        if ($status == '@' && isset($this->_supported['WALLCHOPS']))
-            return TRUE;
+        if ($status === '@' && isset($this->supported['WALLCHOPS'])) {
+            return true;
+        }
 
-        return FALSE;
+        return false;
     }
 
     /**
@@ -536,8 +543,8 @@ extends Erebot_Module_Base
      *      Potential channel name to test.
      *
      * \retval bool
-     *      TRUE if the given $chan can be used as a channel name,
-     *      FALSE otherwise.
+     *      \b true if the given $chan can be used as a channel name,
+     *      \b false otherwise.
      *
      * \note
      *      This method uses very basic checks to test validity
@@ -547,39 +554,43 @@ extends Erebot_Module_Base
      */
     public function isChannel($chan)
     {
-        if (!Erebot_Utils::stringifiable($chan)) {
-            $fmt = $this->getFormatter(NULL);
-            throw new Erebot_InvalidValueException(
+        if (!\Erebot\Utils::stringifiable($chan)) {
+            $fmt = $this->getFormatter(null);
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Bad channel name')
             );
         }
 
         $chan = (string) $chan;
-        if (!strlen($chan))
-            return FALSE;
+        if (!strlen($chan)) {
+            return false;
+        }
 
         $prefix     = $chan[0];
-        if (isset($this->_supported['CHANTYPES']) &&
-            is_string($this->_supported['CHANTYPES']))
-            $allowed = $this->_supported['CHANTYPES'];
-        else if (isset($this->_supported['CHANLIMIT']) &&
-                is_array($this->_supported['CHANLIMIT']) &&
-                count($this->_supported['CHANLIMIT']))
-            $allowed = implode('', array_keys($this->_supported['CHANLIMIT']));
-        else
+        if (isset($this->supported['CHANTYPES']) && is_string($this->supported['CHANTYPES'])) {
+            $allowed = $this->supported['CHANTYPES'];
+        } elseif (isset($this->supported['CHANLIMIT']) &&
+                is_array($this->supported['CHANLIMIT']) &&
+                count($this->supported['CHANLIMIT'])) {
+            $allowed = implode('', array_keys($this->supported['CHANLIMIT']));
+        } else {
             // As per RFC 2811 - (2.1) Namespace
             $allowed = '#&+!';
+        }
 
         // Restricted characters in channel names,
         // as per RFC 2811 - (2.1) Namespace.
-        foreach (array(' ', ',', "\x07", ':') as $token)
-            if (strpos($token, $chan) !== FALSE)
-                return FALSE;
+        foreach (array(' ', ',', "\x07", ':') as $token) {
+            if (strpos($token, $chan) !== false) {
+                return false;
+            }
+        }
 
-        if (strlen($chan) > 50)
-            return FALSE;
+        if (strlen($chan) > 50) {
+            return false;
+        }
 
-        return (strpos($allowed, $prefix) !== FALSE);
+        return (strpos($allowed, $prefix) !== false);
     }
 
     /**
@@ -591,9 +602,9 @@ extends Erebot_Module_Base
      *
      * \retval mixed
      *      Returns the number of entries this type of list may
-     *      contain or NULL if no maximum has been defined.
+     *      contain or \b null if no maximum has been defined.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      The value passed to $list does not represent a valid
      *      list type.
      *
@@ -612,9 +623,9 @@ extends Erebot_Module_Base
      */
     public function getMaxListSize($list)
     {
-        $fmt = $this->getFormatter(NULL);
+        $fmt = $this->getFormatter(null);
         if (!is_int($list)) {
-            throw new Erebot_InvalidValueException(
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Invalid list type')
             );
         }
@@ -622,34 +633,33 @@ extends Erebot_Module_Base
         switch ($list) {
             case self::LIST_BANS:
             case self::LIST_EXCEPTS:
-            case self::LIST_INVITES:{
+            case self::LIST_INVITES:
                 $mode = $this->getChanListMode($list);
-                if (isset($this->_supported['MAXLIST'][$mode]) &&
-                    ctype_digit($this->_supported['MAXLIST'][$mode]))
-                    return (int) $this->_supported['MAXLIST'][$mode];
+                if (isset($this->supported['MAXLIST'][$mode]) &&
+                    ctype_digit($this->supported['MAXLIST'][$mode])) {
+                    return (int) $this->supported['MAXLIST'][$mode];
+                }
                 if ($list == self::LIST_BANS &&
-                    isset($this->_supported['MAXBANS']) &&
-                    ctype_digit($this->_supported['MAXBANS']))
-                    return (int) $this->_supported['MAXBANS'];
-                return NULL;
-            }
+                    isset($this->supported['MAXBANS']) &&
+                    ctype_digit($this->supported['MAXBANS'])) {
+                    return (int) $this->supported['MAXBANS'];
+                }
+                return null;
 
-            case self::LIST_SILENCES:{
-                if (isset($this->_supported['SILENCE']) &&
-                    ctype_digit($this->_supported['SILENCE']))
-                    return (int) $this->_supported['SILENCE'];
-                return NULL;
-            }
+            case self::LIST_SILENCES:
+                if (isset($this->supported['SILENCE']) && ctype_digit($this->supported['SILENCE'])) {
+                    return (int) $this->supported['SILENCE'];
+                }
+                return null;
 
-            case self::LIST_WATCHES:{
-                if (isset($this->_supported['WATCH']) &&
-                    ctype_digit($this->_supported['WATCH']))
-                    return (int) $this->_supported['WATCH'];
-                return NULL;
-            }
+            case self::LIST_WATCHES:
+                if (isset($this->supported['WATCH']) && ctype_digit($this->supported['WATCH'])) {
+                    return (int) $this->supported['WATCH'];
+                }
+                return null;
 
             default:
-                throw new Erebot_InvalidValueException(
+                throw new \Erebot\InvalidValueException(
                     $fmt->_('Invalid list type')
                 );
         }
@@ -668,7 +678,7 @@ extends Erebot_Module_Base
      *      be on simultaneously or -1 if there is no such
      *      limit.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      The given $chanPrefix does not refer to a valid
      *      channel type.
      *
@@ -679,25 +689,28 @@ extends Erebot_Module_Base
      */
     public function getChanLimit($chanPrefix)
     {
-        if (!$this->isChannel($chanPrefix))
-            throw new Erebot_InvalidValueException('Invalid prefix');
+        if (!$this->isChannel($chanPrefix)) {
+            throw new \Erebot\InvalidValueException('Invalid prefix');
+        }
 
-        if (isset($this->_supported['CHANLIMIT']) &&
-            is_array($this->_supported['CHANLIMIT'])) {
-            foreach ($this->_supported['CHANLIMIT'] as $prefixes => $limit) {
-                if (strpos($prefixes, $chanPrefix) !== FALSE) {
-                    if ($limit == '')
+        if (isset($this->supported['CHANLIMIT']) &&
+            is_array($this->supported['CHANLIMIT'])) {
+            foreach ($this->supported['CHANLIMIT'] as $prefixes => $limit) {
+                if (strpos($prefixes, $chanPrefix) !== false) {
+                    if ($limit == '') {
                         return -1;
+                    }
 
-                    if (ctype_digit($limit))
+                    if (ctype_digit($limit)) {
                         return (int) $limit;
+                    }
                 }
             }
         }
 
-        if (isset($this->_supported['MAXCHANNELS']) &&
-            ctype_digit($this->_supported['MAXCHANNELS']))
-            return (int) $this->_supported['MAXCHANNELS'];
+        if (isset($this->supported['MAXCHANNELS']) && ctype_digit($this->supported['MAXCHANNELS'])) {
+            return (int) $this->supported['MAXCHANNELS'];
+        }
         return -1;
     }
 
@@ -713,7 +726,7 @@ extends Erebot_Module_Base
      *      The maximum size for a message/entity of type $type
      *      or -1 if there is no limit (or the limit is unknown).
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      The given $type does not refer to a valid
      *      type of message/entity.
      *
@@ -727,51 +740,48 @@ extends Erebot_Module_Base
      */
     public function getMaxTextLen($type)
     {
-        $fmt = $this->getFormatter(NULL);
-        if (!is_int($type))
-            throw new Erebot_InvalidValueException(
+        $fmt = $this->getFormatter(null);
+        if (!is_int($type)) {
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Invalid text type')
             );
+        }
 
         switch ($type) {
-            case self::TEXT_AWAY:{
-                if (isset($this->_supported['AWAYLEN']) &&
-                    ctype_digit($this->_supported['AWAYLEN']))
-                    return (int) $this->_supported['AWAYLEN'];
+            case self::TEXT_AWAY:
+                if (isset($this->supported['AWAYLEN']) && ctype_digit($this->supported['AWAYLEN'])) {
+                    return (int) $this->supported['AWAYLEN'];
+                }
                 break;
-            }
 
-            case self::TEXT_CHAN_NAME:{
-                if (isset($this->_supported['CHANNELLEN']) &&
-                    ctype_digit($this->_supported['CHANNELLEN']))
-                    return (int) $this->_supported['CHANNELLEN'];
+            case self::TEXT_CHAN_NAME:
+                if (isset($this->supported['CHANNELLEN']) && ctype_digit($this->supported['CHANNELLEN'])) {
+                    return (int) $this->supported['CHANNELLEN'];
+                }
                 return 200;
-            }
 
-            case self::TEXT_KICK:{
-                if (isset($this->_supported['KICKLEN']) &&
-                    ctype_digit($this->_supported['KICKLEN']))
-                    return (int) $this->_supported['KICKLEN'];
+            case self::TEXT_KICK:
+                if (isset($this->supported['KICKLEN']) && ctype_digit($this->supported['KICKLEN'])) {
+                    return (int) $this->supported['KICKLEN'];
+                }
                 break;
-            }
 
-            case self::TEXT_NICKNAME:{
-                if (isset($this->_supported['NICKLEN']) &&
-                    ctype_digit($this->_supported['NICKLEN']))
-                    return (int) $this->_supported['NICKLEN'];
+            case self::TEXT_NICKNAME:
+                if (isset($this->supported['NICKLEN']) && ctype_digit($this->supported['NICKLEN'])) {
+                    return (int) $this->supported['NICKLEN'];
+                }
                 return 9;
-            }
 
-            case self::TEXT_TOPIC:{
-                if (isset($this->_supported['TOPICLEN'])) {
-                    if (ctype_digit($this->_supported['TOPICLEN']))
-                        return (int) $this->_supported['TOPICLEN'];
+            case self::TEXT_TOPIC:
+                if (isset($this->supported['TOPICLEN'])) {
+                    if (ctype_digit($this->supported['TOPICLEN'])) {
+                        return (int) $this->supported['TOPICLEN'];
+                    }
                 }
                 return -1;
-            }
 
             default:
-                throw new Erebot_InvalidValueException(
+                throw new \Erebot\InvalidValueException(
                     $fmt->_('Invalid text type')
                 );
         }
@@ -789,9 +799,9 @@ extends Erebot_Module_Base
      */
     public function getCaseMapping()
     {
-        if (isset($this->_supported['CASEMAPPING']) &&
-            is_string($this->_supported['CASEMAPPING']))
-            return strtolower($this->_supported['CASEMAPPING']);
+        if (isset($this->supported['CASEMAPPING']) && is_string($this->supported['CASEMAPPING'])) {
+            return strtolower($this->supported['CASEMAPPING']);
+        }
         return 'rfc1459';
     }
 
@@ -801,17 +811,17 @@ extends Erebot_Module_Base
      * \retval string
      *      The server's charset.
      *
-     * \throw Erebot_NotFoundException
+     * \throw Erebot::NotFoundException
      *      The server did not declare its charset.
      */
     public function getCharset()
     {
-        if (isset($this->_supported['CHARSET']) &&
-            is_string($this->_supported['CHARSET']))
-            return $this->_supported['CHARSET'];
+        if (isset($this->supported['CHARSET']) && is_string($this->supported['CHARSET'])) {
+            return $this->supported['CHARSET'];
+        }
 
-        $fmt = $this->getFormatter(NULL);
-        throw new Erebot_NotFoundException(
+        $fmt = $this->getFormatter(null);
+        throw new \Erebot\NotFoundException(
             $fmt->_('No charset specified')
         );
     }
@@ -822,7 +832,7 @@ extends Erebot_Module_Base
      * \retval string
      *      Name of the IRC network this server belongs to.
      *
-     * \throw Erebot_NotFoundException
+     * \throw Erebot::NotFoundException
      *      The server did not declare itself as being part
      *      of any specific IRC network.
      *
@@ -833,11 +843,11 @@ extends Erebot_Module_Base
      */
     public function getNetworkName()
     {
-        if (isset($this->_supported['NETWORK']) &&
-            is_string($this->_supported['NETWORK']))
-            return $this->_supported['NETWORK'];
+        if (isset($this->supported['NETWORK']) && is_string($this->supported['NETWORK'])) {
+            return $this->supported['NETWORK'];
+        }
 
-        throw new Erebot_NotFoundException(
+        throw new \Erebot\NotFoundException(
             $fmt->_('No network declared')
         );
     }
@@ -854,56 +864,58 @@ extends Erebot_Module_Base
      *      The channel mode to query to retrieve the
      *      content of the list represented by $list.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      There is no such type of list.
      *
-     * \throw Erebot_NotFoundException
+     * \throw Erebot::NotFoundException
      *      The given type of list is not available
      *      on that particular IRC server.
      */
     public function getChanListMode($list)
     {
-        $fmt = $this->getFormatter(NULL);
-        if (!is_int($list))
-            throw new Erebot_InvalidValueException(
+        $fmt = $this->getFormatter(null);
+        if (!is_int($list)) {
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Bad channel list ID')
             );
+        }
 
         switch ($list) {
-            case self::LIST_BANS:{
+            case self::LIST_BANS:
                 return 'b';
-            }
 
-            case self::LIST_EXCEPTS:{
-                if (!isset($this->_supported['EXCEPTS']))
-                    throw new Erebot_NotFoundException(
+            case self::LIST_EXCEPTS:
+                if (!isset($this->supported['EXCEPTS'])) {
+                    throw new \Erebot\NotFoundException(
                         $fmt->_(
                             'Excepts are not available on this server'
                         )
                     );
+                }
 
-                if ($this->_supported['EXCEPTS'] === TRUE)
+                if ($this->supported['EXCEPTS'] === true) {
                     return 'e';
-                return $this->_supported['EXCEPTS'];
+                }
+                return $this->supported['EXCEPTS'];
                 break;
-            }
 
-            case self::LIST_INVITES:{
-                if (!isset($this->_supported['INVEX']))
-                    throw new Erebot_NotFoundException(
+            case self::LIST_INVITES:
+                if (!isset($this->supported['INVEX'])) {
+                    throw new \Erebot\NotFoundException(
                         $fmt->_(
                             'Invites are not available on this server'
                         )
                     );
+                }
 
-                if ($this->_supported['INVEX'] === TRUE)
+                if ($this->supported['INVEX'] === true) {
                     return 'I';
-                return $this->_supported['INVEX'];
+                }
+                return $this->supported['INVEX'];
                 break;
-            }
 
             default:
-                throw new Erebot_InvalidValueException(
+                throw new \Erebot\InvalidValueException(
                     $fmt->_('Invalid channel list ID')
                 );
         }
@@ -917,22 +929,24 @@ extends Erebot_Module_Base
      *      The channel mode to test.
      *
      * \retval bool
-     *      TRUE if the given mode can be used as a
-     *      valid channel privilege, FALSE otherwise.
+     *      \b true if the given mode can be used as a
+     *      valid channel privilege, \b false otherwise.
      */
     public function isChannelPrivilege($mode)
     {
-        $fmt = $this->getFormatter(NULL);
-        if (!is_string($mode) || strlen($mode) != 1)
-            throw new Erebot_InvalidValueException(
+        $fmt = $this->getFormatter(null);
+        if (!is_string($mode) || strlen($mode) != 1) {
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Invalid mode')
             );
+        }
 
-        if (!isset($this->_supported['PREFIX']))
+        if (!isset($this->supported['PREFIX'])) {
             // Default prefixes based on RFC 1459.
             $prefixes = '(ov)@+';
-        else
-            $prefixes = $this->_supported['PREFIX'];
+        } else {
+            $prefixes = $this->supported['PREFIX'];
+        }
 
         $ok = preg_match(
             self::PATTERN_PREFIX,
@@ -940,9 +954,10 @@ extends Erebot_Module_Base
             $matches
         );
 
-        if ($ok)
-            return (strpos($matches[1], $mode) !== FALSE);
-        return FALSE;
+        if ($ok) {
+            return (strpos($matches[1], $mode) !== false);
+        }
+        return false;
     }
 
     /**
@@ -957,29 +972,31 @@ extends Erebot_Module_Base
      * \retval string
      *      The prefix corresponding to that mode.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      The given $mode is not valid.
      *
-     * \throw Erebot_NotFoundException
+     * \throw Erebot::NotFoundException
      *      The given $mode does not refer to a channel status.
      *
      * \see
-     *      Erebot_Module_ServerCapabilities::getChanModeForPrefix()
+     *      Erebot::Module::ServerCapabilities::getChanModeForPrefix()
      *      does the opposite translation.
      */
     public function getChanPrefixForMode($mode)
     {
-        $fmt = $this->getFormatter(NULL);
-        if (!is_string($mode) || strlen($mode) != 1)
-            throw new Erebot_InvalidValueException(
+        $fmt = $this->getFormatter(null);
+        if (!is_string($mode) || strlen($mode) != 1) {
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Invalid mode')
             );
+        }
 
-        if (!isset($this->_supported['PREFIX']))
+        if (!isset($this->supported['PREFIX'])) {
             // Default prefixes based on RFC 1459.
             $prefixes = '(ov)@+';
-        else
-            $prefixes = $this->_supported['PREFIX'];
+        } else {
+            $prefixes = $this->supported['PREFIX'];
+        }
 
         $ok = preg_match(
             self::PATTERN_PREFIX,
@@ -989,11 +1006,12 @@ extends Erebot_Module_Base
 
         if ($ok) {
             $pos = strpos($matches[1], $mode);
-            if ($pos !== FALSE && strlen($matches[2]) > $pos)
+            if ($pos !== false && strlen($matches[2]) > $pos) {
                 return $matches[2][$pos];
+            }
         }
 
-        throw new Erebot_NotFoundException(
+        throw new \Erebot\NotFoundException(
             $fmt->_('No such mode')
         );
     }
@@ -1009,29 +1027,31 @@ extends Erebot_Module_Base
      * \retval string
      *      The mode corresponding to that prefix.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      The given $prefix is not valid.
      *
-     * \throw Erebot_NotFoundException
+     * \throw Erebot::NotFoundException
      *      The given $prefix does not refer to a channel status.
      *
      * \see
-     *      Erebot_Module_ServerCapabilities::getChanPrefixForMode()
+     *      Erebot::Module::ServerCapabilities::getChanPrefixForMode()
      *      does the opposite translation.
      */
     public function getChanModeForPrefix($prefix)
     {
-        $fmt = $this->getFormatter(NULL);
-        if (!is_string($prefix) || strlen($prefix) != 1)
-            throw new Erebot_InvalidValueException(
+        $fmt = $this->getFormatter(null);
+        if (!is_string($prefix) || strlen($prefix) != 1) {
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Invalid prefix')
             );
+        }
 
-        if (!isset($this->_supported['PREFIX']))
+        if (!isset($this->supported['PREFIX'])) {
             // Default prefixes based on RFC 1459.
             $prefixes = '(ov)@+';
-        else
-            $prefixes = $this->_supported['PREFIX'];
+        } else {
+            $prefixes = $this->supported['PREFIX'];
+        }
 
         $ok = preg_match(
             self::PATTERN_PREFIX,
@@ -1040,11 +1060,12 @@ extends Erebot_Module_Base
         );
         if ($ok) {
             $pos = strpos($matches[2], $prefix);
-            if ($pos !== FALSE && strlen($matches[1]) > $pos)
+            if ($pos !== false && strlen($matches[1]) > $pos) {
                 return $matches[1][$pos];
+            }
         }
 
-        throw new Erebot_NotFoundException(
+        throw new \Erebot\NotFoundException(
             $fmt->_('No such prefix')
         );
     }
@@ -1061,35 +1082,40 @@ extends Erebot_Module_Base
      *      in this class, indicating whether the given
      *      $mode is of type A, B, C or D.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      The given parameter does not refer to a valid
      *      channel mode.
      *
-     * \throw Erebot_NotFoundException
+     * \throw Erebot::NotFoundException
      *      The given $mode does not exist on this IRC server.
      */
     public function qualifyChannelMode($mode)
     {
-        $fmt = $this->getFormatter(NULL);
-        if (!is_string($mode) || strlen($mode) != 1)
-            throw new Erebot_InvalidValueException(
+        $fmt = $this->getFormatter(null);
+        if (!is_string($mode) || strlen($mode) != 1) {
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Invalid mode')
             );
+        }
 
-        if (!isset($this->_supported['CHANMODES']) ||
-            !is_array($this->_supported['CHANMODES']))
-            throw new Erebot_NotFoundException('No such mode');
+        if (!isset($this->supported['CHANMODES']) || !is_array($this->supported['CHANMODES'])) {
+            throw new \Erebot\NotFoundException('No such mode');
+        }
 
         $type = self::MODE_TYPE_A;
-        foreach ($this->_supported['CHANMODES'] as $modes) {
-            if ($type > self::MODE_TYPE_D)  // Modes after type 4 are reserved
-                break;                      // for future extensions.
+        foreach ($this->supported['CHANMODES'] as $modes) {
+            if ($type > self::MODE_TYPE_D) {
+                // Modes after type 4 are reserved
+                // for future extensions.
+                break;
+            }
 
-            if (strpos($modes, $mode) !== FALSE)
+            if (strpos($modes, $mode) !== false) {
                 return $type;
+            }
             $type++;
         }
-        throw new Erebot_NotFoundException(
+        throw new \Erebot\NotFoundException(
             $fmt->_('No such mode')
         );
     }
@@ -1105,7 +1131,7 @@ extends Erebot_Module_Base
      *      The maximum number of targets for that command
      *      or -1 if there is no limit or it is unknown.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      $cmd does not refer to a valid IRC command.
      *
      * \note
@@ -1123,24 +1149,25 @@ extends Erebot_Module_Base
     public function getMaxTargets($cmd)
     {
         if (!is_string($cmd)) {
-            $fmt = $this->getFormatter(NULL);
-            throw new Erebot_InvalidValueException(
+            $fmt = $this->getFormatter(null);
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Invalid command')
             );
         }
 
         $cmd = strtoupper($cmd);
-        if (isset($this->_supported['TARGMAX'][$cmd])) {
-            if ($this->_supported['TARGMAX'][$cmd] == '')
+        if (isset($this->supported['TARGMAX'][$cmd])) {
+            if ($this->supported['TARGMAX'][$cmd] === '') {
                 return -1;
+            }
 
-            if (ctype_digit($this->_supported['TARGMAX'][$cmd]))
-                return (int) $this->_supported['TARGMAX'][$cmd];
+            if (ctype_digit($this->supported['TARGMAX'][$cmd])) {
+                return (int) $this->supported['TARGMAX'][$cmd];
+            }
+        } elseif (isset($this->supported['MAXTARGETS']) &&
+                ctype_digit($this->supported['MAXTARGETS'])) {
+            return (int) $this->supported['MAXTARGETS'];
         }
-
-        else if (isset($this->_supported['MAXTARGETS']) &&
-                ctype_digit($this->_supported['MAXTARGETS']))
-            return (int) $this->_supported['MAXTARGETS'];
 
         return -1;
     }
@@ -1159,12 +1186,14 @@ extends Erebot_Module_Base
      */
     public function getMaxVariableModes()
     {
-        if (isset($this->_supported['MODES'])) {
-            if ($this->_supported['MODES'] == '')
+        if (isset($this->supported['MODES'])) {
+            if ($this->supported['MODES'] === '') {
                 return -1;
+            }
 
-            if (ctype_digit($this->_supported['MODES']))
-                return (int) $this->_supported['MODES'];
+            if (ctype_digit($this->supported['MODES'])) {
+                return (int) $this->supported['MODES'];
+            }
         }
 
         return 3;
@@ -1185,9 +1214,9 @@ extends Erebot_Module_Base
      */
     public function getMaxParams()
     {
-        if (isset($this->_supported['MAXPARA']) &&
-            ctype_digit($this->_supported['MAXPARA']))
-            return (int) $this->_supported['MAXPARA'];
+        if (isset($this->supported['MAXPARA']) && ctype_digit($this->supported['MAXPARA'])) {
+            return (int) $this->supported['MAXPARA'];
+        }
         return 12;
     }
 
@@ -1199,10 +1228,10 @@ extends Erebot_Module_Base
      *      and whose values are the port where SSL support is
      *      enabled.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      The data received from the IRC server was invalid.
      *
-     * \throw Erebot_NotFoundException
+     * \throw Erebot::NotFoundException
      *      No information could be retrieved indicating whether
      *      this IRC server supports SSL connections or not.
      *
@@ -1212,36 +1241,38 @@ extends Erebot_Module_Base
      */
     public function getSSL()
     {
-        $fmt = $this->getFormatter(NULL);
-        if (isset($this->_supported['SSL'])) {
+        $fmt = $this->getFormatter(null);
+        if (isset($this->supported['SSL'])) {
             // Received "SSL=", so assume no SSL support.
-            if ($this->_supported['SSL'] === TRUE)
+            if ($this->supported['SSL'] === true) {
                 return array();
-
-            if (is_string($this->_supported['SSL'])) {
-                list($key, $val) = explode(':', $this->_supported['SSL']);
-                $ssl = array($key => $val);
             }
-            else if (is_array($this->_supported['SSL']))
-                $ssl = $this->_supported['SSL'];
-            else
-                throw new Erebot_InvalidValueException(
+
+            if (is_string($this->supported['SSL'])) {
+                list($key, $val) = explode(':', $this->supported['SSL']);
+                $ssl = array($key => $val);
+            } elseif (is_array($this->supported['SSL'])) {
+                $ssl = $this->supported['SSL'];
+            } else {
+                throw new \Erebot\InvalidValueException(
                     $fmt->_('Invalid data received')
                 );
+            }
 
             $result = array();
             foreach ($ssl as $ip => $val) {
                 $port = (int) $val;
-                if (!ctype_digit($val) || $port <= 0 || $port > 65535)
-                    throw new Erebot_InvalidValueException(
+                if (!ctype_digit($val) || $port <= 0 || $port > 65535) {
+                    throw new \Erebot\InvalidValueException(
                         $fmt->_('Not a valid port')
                     );
+                }
                 $result[$ip] = $port;
             }
             return $result;
         }
 
-        throw new Erebot_NotFoundException(
+        throw new \Erebot\NotFoundException(
             $fmt->_('No SSL information available')
         );
     }
@@ -1256,29 +1287,32 @@ extends Erebot_Module_Base
      * \retval int
      *      The length of the "id" portion of safe channels.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      The given $prefix does not represent a valid channel type.
      *
-     * \throw Erebot_NotFoundException
+     * \throw Erebot::NotFoundException
      *      Safe channels are not supported by this IRC server.
      */
     public function getIdLength($prefix)
     {
-        $fmt = $this->getFormatter(NULL);
-        if (!is_string($prefix) || strlen($prefix) != 1)
-            throw new Erebot_InvalidValueException(
+        $fmt = $this->getFormatter(null);
+        if (!is_string($prefix) || strlen($prefix) != 1) {
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Bad prefix')
             );
+        }
 
-        if (isset($this->_supported['IDCHAN'][$prefix]) &&
-            ctype_digit($this->_supported['IDCHAN'][$prefix]))
-            return (int) $this->_supported['IDCHAN'][$prefix];
+        if (isset($this->supported['IDCHAN'][$prefix]) &&
+            ctype_digit($this->supported['IDCHAN'][$prefix])) {
+            return (int) $this->supported['IDCHAN'][$prefix];
+        }
 
-        if (isset($this->_supported['CHIDLEN']) &&
-            ctype_digit($this->_supported['CHIDLEN']))
-            return (int) $this->_supported['CHIDLEN'];
+        if (isset($this->supported['CHIDLEN']) &&
+            ctype_digit($this->supported['CHIDLEN'])) {
+            return (int) $this->supported['CHIDLEN'];
+        }
 
-        throw new Erebot_NotFoundException(
+        throw new \Erebot\NotFoundException(
             $fmt->_(
                 'Safe channels are not available on this server'
             )
@@ -1294,10 +1328,10 @@ extends Erebot_Module_Base
      *      be tested.
      *
      * \retval bool
-     *      TRUE if the IRC server supports that $standard,
-     *      FALSE otherwise.
+     *      \b true if the IRC server supports that $standard,
+     *      \b false otherwise.
      *
-     * \throw Erebot_InvalidValueException
+     * \throw Erebot::InvalidValueException
      *      The given $standard does not a refer to a valid
      *      standard.
      *
@@ -1311,31 +1345,33 @@ extends Erebot_Module_Base
     public function supportsStandard($standard)
     {
         if (!is_string($standard)) {
-            $fmt = $this->getFormatter(NULL);
-            throw new Erebot_InvalidValueException(
+            $fmt = $this->getFormatter(null);
+            throw new \Erebot\InvalidValueException(
                 $fmt->_('Bad standard name')
             );
         }
 
-        if (isset($this->_supported['STD'])) {
+        if (isset($this->supported['STD'])) {
             $standards = array();
 
-            if (is_string($this->_supported['STD']))
-                $standards[] = $this->_supported['STD'];
-            else if (is_array($this->_supported['STD']))
-                $standards = $this->_supported['STD'];
+            if (is_string($this->supported['STD'])) {
+                $standards[] = $this->supported['STD'];
+            } elseif (is_array($this->supported['STD'])) {
+                $standards = $this->supported['STD'];
+            }
 
             foreach ($standards as $std) {
-                if (!strcasecmp($std, $standard))
-                    return TRUE;
+                if (!strcasecmp($std, $standard)) {
+                    return true;
+                }
             }
         }
 
-        if (!strcasecmp($standard, 'rfc2812') &&
-            isset($this->_supported['RFC2812']))
-            return TRUE;
+        if (!strcasecmp($standard, 'rfc2812') && isset($this->supported['RFC2812'])) {
+            return true;
+        }
 
-        return FALSE;
+        return false;
     }
 
     /**
@@ -1345,19 +1381,19 @@ extends Erebot_Module_Base
      * \retval string
      *      The prefix to use to manipulate extended bans.
      *
-     * \throw Erebot_NotFoundException
+     * \throw Erebot::NotFoundException
      *      This IRC server does not support extended bans.
      */
     public function getExtendedBanPrefix()
     {
-        if (is_array($this->_supported['EXTBAN']) &&
-            isset($this->_supported['EXTBAN'][0]) &&
-            strlen($this->_supported['EXTBAN'][0]) == 1) {
-            return $this->_supported['EXTBAN'][0];
+        if (is_array($this->supported['EXTBAN']) &&
+            isset($this->supported['EXTBAN'][0]) &&
+            strlen($this->supported['EXTBAN'][0]) == 1) {
+            return $this->supported['EXTBAN'][0];
         }
 
-        $fmt = $this->getFormatter(NULL);
-        throw new Erebot_NotFoundException(
+        $fmt = $this->getFormatter(null);
+        throw new \Erebot\NotFoundException(
             $fmt->_(
                 'Extended bans are not supported on this server'
             )
@@ -1371,20 +1407,18 @@ extends Erebot_Module_Base
      * \retval list
      *      List of extended bans supported by this server.
      *
-     * \throw Erebot_NotFoundException
+     * \throw Erebot::NotFoundException
      *      This IRC server does not support extended bans.
      */
     public function getExtendedBanModes()
     {
-        if (is_array($this->_supported['EXTBAN']) &&
-            isset($this->_supported['EXTBAN'][1])) {
-            return str_split($this->_supported['EXTBAN'][1]);
+        if (is_array($this->supported['EXTBAN']) && isset($this->supported['EXTBAN'][1])) {
+            return str_split($this->supported['EXTBAN'][1]);
         }
 
-        $fmt = $this->getFormatter(NULL);
-        throw new Erebot_NotFoundException(
+        $fmt = $this->getFormatter(null);
+        throw new \Erebot\NotFoundException(
             $fmt->_('Extended bans are not supported on this server')
         );
     }
 }
-
