@@ -121,13 +121,13 @@ class ServerCapabilities extends \Erebot\Module\Base implements \Erebot\Interfac
 
         if ($flags & self::RELOAD_HANDLERS) {
             $handler = new \Erebot\NumericHandler(
-                new \Erebot\CallableWrapper(array($this, 'handleNumeric')),
+                \Erebot\CallableWrapper::wrap(array($this, 'handleNumeric')),
                 $this->getNumRef('RPL_ISUPPORT')
             );
             $this->connection->addNumericHandler($handler);
 
             $handler = new \Erebot\NumericHandler(
-                new \Erebot\CallableWrapper(array($this, 'handleNumeric')),
+                \Erebot\CallableWrapper::wrap(array($this, 'handleNumeric')),
                 $this->getNumRef('RPL_LUSERCLIENT')
             );
             $this->connection->addNumericHandler($handler);

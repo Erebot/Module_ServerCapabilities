@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_API.git",
-                "reference": "66abd9929f512946828c26d6a3b46641f31ad9b4"
+                "reference": "353a42e42f4e1efc74b7c17dfe21e01f44b9a966"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Erebot_API/zipball/66abd9929f512946828c26d6a3b46641f31ad9b4",
-                "reference": "66abd9929f512946828c26d6a3b46641f31ad9b4",
+                "url": "https://api.github.com/repos/Erebot/Erebot_API/zipball/353a42e42f4e1efc74b7c17dfe21e01f44b9a966",
+                "reference": "353a42e42f4e1efc74b7c17dfe21e01f44b9a966",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +59,7 @@
                 "bot",
                 "irc"
             ],
-            "time": "2014-03-25 23:35:44"
+            "time": "2014-03-27 12:56:12"
         },
         {
             "name": "erebot/callable-wrapper",
@@ -67,12 +67,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/CallableWrapper.git",
-                "reference": "f57af4d48d0ff7f1071dd624c7dea6fbfdfc2d9f"
+                "reference": "8aeb93e6e945e29139f33b88668eb89d7dd65f55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/CallableWrapper/zipball/f57af4d48d0ff7f1071dd624c7dea6fbfdfc2d9f",
-                "reference": "f57af4d48d0ff7f1071dd624c7dea6fbfdfc2d9f",
+                "url": "https://api.github.com/repos/Erebot/CallableWrapper/zipball/8aeb93e6e945e29139f33b88668eb89d7dd65f55",
+                "reference": "8aeb93e6e945e29139f33b88668eb89d7dd65f55",
                 "shasum": ""
             },
             "require": {
@@ -110,7 +110,7 @@
             "keywords": [
                 "callable"
             ],
-            "time": "2014-03-25 12:20:27"
+            "time": "2014-03-27 12:37:58"
         },
         {
             "name": "erebot/generic-doc",
@@ -268,12 +268,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Timer.git",
-                "reference": "eeac2c51d2f57b7064c59ba08236b3ac5d90198a"
+                "reference": "9834be144007cd0cb63139e17409a61eaf324282"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Timer/zipball/eeac2c51d2f57b7064c59ba08236b3ac5d90198a",
-                "reference": "eeac2c51d2f57b7064c59ba08236b3ac5d90198a",
+                "url": "https://api.github.com/repos/Erebot/Timer/zipball/9834be144007cd0cb63139e17409a61eaf324282",
+                "reference": "9834be144007cd0cb63139e17409a61eaf324282",
                 "shasum": ""
             },
             "require": {
@@ -312,7 +312,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2014-03-24 16:10:31"
+            "time": "2014-03-27 20:15:15"
         },
         {
             "name": "erebot/uri",
@@ -642,17 +642,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_Testenv.git",
-                "reference": "d3aa788dc59bd3e0cd8b2a247e27b8e876831f41"
+                "reference": "f5f2371a3f6ad55cc185698d4aadab8f2323041e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Erebot_Testenv/zipball/d3aa788dc59bd3e0cd8b2a247e27b8e876831f41",
-                "reference": "d3aa788dc59bd3e0cd8b2a247e27b8e876831f41",
+                "url": "https://api.github.com/repos/Erebot/Erebot_Testenv/zipball/f5f2371a3f6ad55cc185698d4aadab8f2323041e",
+                "reference": "f5f2371a3f6ad55cc185698d4aadab8f2323041e",
                 "shasum": ""
             },
             "require": {
                 "erebot/callable-wrapper": "*",
                 "erebot/styling": "*",
+                "erebot/timer": "*",
                 "pdepend/pdepend": "*",
                 "php": ">=5.2.2",
                 "phpmd/phpmd": "*",
@@ -682,7 +683,7 @@
             "keywords": [
                 "Erebot"
             ],
-            "time": "2014-03-25 18:20:26"
+            "time": "2014-03-27 20:08:17"
         },
         {
             "name": "pdepend/pdepend",
@@ -1643,12 +1644,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "7678c61416966017feb83f2e0b648aa74d359343"
+                "reference": "fed7f04d8e6f51d3e66b5e29aac399d2f2139b94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/7678c61416966017feb83f2e0b648aa74d359343",
-                "reference": "7678c61416966017feb83f2e0b648aa74d359343",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/fed7f04d8e6f51d3e66b5e29aac399d2f2139b94",
+                "reference": "fed7f04d8e6f51d3e66b5e29aac399d2f2139b94",
                 "shasum": ""
             },
             "require": {
@@ -1684,7 +1685,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-03 12:53:01"
+            "time": "2014-03-26 11:51:10"
         },
         {
             "name": "symfony/console",
@@ -1750,12 +1751,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DependencyInjection.git",
-                "reference": "746b2131a6e8767267babc109138901ccf36b137"
+                "reference": "75d52f01001e7ae1d12a4f0188b8fd9f6e77b3d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/746b2131a6e8767267babc109138901ccf36b137",
-                "reference": "746b2131a6e8767267babc109138901ccf36b137",
+                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/75d52f01001e7ae1d12a4f0188b8fd9f6e77b3d8",
+                "reference": "75d52f01001e7ae1d12a4f0188b8fd9f6e77b3d8",
                 "shasum": ""
             },
             "require": {
@@ -1800,7 +1801,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-03 12:53:01"
+            "time": "2014-03-27 14:53:24"
         },
         {
             "name": "symfony/filesystem",
@@ -1809,12 +1810,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "e81f1b30eb9748c3f8e0de3a92ea210845cff0a9"
+                "reference": "fe66eed49c7bbfc312978ef0f86e490127a345b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/e81f1b30eb9748c3f8e0de3a92ea210845cff0a9",
-                "reference": "e81f1b30eb9748c3f8e0de3a92ea210845cff0a9",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/fe66eed49c7bbfc312978ef0f86e490127a345b2",
+                "reference": "fe66eed49c7bbfc312978ef0f86e490127a345b2",
                 "shasum": ""
             },
             "require": {
@@ -1849,7 +1850,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "http://symfony.com",
-            "time": "2014-01-07 13:29:57"
+            "time": "2014-03-26 12:01:00"
         },
         {
             "name": "symfony/finder",

@@ -85,6 +85,7 @@ extends Erebot_Testenv_Module_TestCase
     public function setUp()
     {
         $this->_module = new \Erebot\Module\ServerCapabilities(NULL);
+        \Erebot\CallableWrapper::initialize();
         parent::setUp();
 
         $profile = $this->getMock(
