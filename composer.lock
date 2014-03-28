@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_API.git",
-                "reference": "353a42e42f4e1efc74b7c17dfe21e01f44b9a966"
+                "reference": "15683b10f1b79ce59efeea6fc79e8b279c0d243c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Erebot_API/zipball/353a42e42f4e1efc74b7c17dfe21e01f44b9a966",
-                "reference": "353a42e42f4e1efc74b7c17dfe21e01f44b9a966",
+                "url": "https://api.github.com/repos/Erebot/Erebot_API/zipball/15683b10f1b79ce59efeea6fc79e8b279c0d243c",
+                "reference": "15683b10f1b79ce59efeea6fc79e8b279c0d243c",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +59,7 @@
                 "bot",
                 "irc"
             ],
-            "time": "2014-03-27 12:56:12"
+            "time": "2014-03-28 10:58:02"
         },
         {
             "name": "erebot/callable-wrapper",
@@ -642,12 +642,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_Testenv.git",
-                "reference": "f5f2371a3f6ad55cc185698d4aadab8f2323041e"
+                "reference": "43fafce904c7d8e05fa004a4a3982cda25d5801b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Erebot_Testenv/zipball/f5f2371a3f6ad55cc185698d4aadab8f2323041e",
-                "reference": "f5f2371a3f6ad55cc185698d4aadab8f2323041e",
+                "url": "https://api.github.com/repos/Erebot/Erebot_Testenv/zipball/43fafce904c7d8e05fa004a4a3982cda25d5801b",
+                "reference": "43fafce904c7d8e05fa004a4a3982cda25d5801b",
                 "shasum": ""
             },
             "require": {
@@ -683,7 +683,7 @@
             "keywords": [
                 "Erebot"
             ],
-            "time": "2014-03-27 20:08:17"
+            "time": "2014-03-28 10:49:56"
         },
         {
             "name": "pdepend/pdepend",
@@ -831,12 +831,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "2c17b8d364ad3bd4ef6a3c991ece668d57ed84f4"
+                "reference": "d19de356ba40878f1480f300600d4e119e1ce185"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2c17b8d364ad3bd4ef6a3c991ece668d57ed84f4",
-                "reference": "2c17b8d364ad3bd4ef6a3c991ece668d57ed84f4",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d19de356ba40878f1480f300600d4e119e1ce185",
+                "reference": "d19de356ba40878f1480f300600d4e119e1ce185",
                 "shasum": ""
             },
             "require": {
@@ -887,7 +887,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-03-25 15:36:45"
+            "time": "2014-03-28 10:51:54"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1908,12 +1908,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "6194137af5f12fbcfc0cb21e269f47542b8beb47"
+                "reference": "cee3067d680232674c6505d91db9d3d635a9a8f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/6194137af5f12fbcfc0cb21e269f47542b8beb47",
-                "reference": "6194137af5f12fbcfc0cb21e269f47542b8beb47",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/cee3067d680232674c6505d91db9d3d635a9a8f4",
+                "reference": "cee3067d680232674c6505d91db9d3d635a9a8f4",
                 "shasum": ""
             },
             "require": {
@@ -1948,7 +1948,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-03 12:53:01"
+            "time": "2014-03-26 11:51:10"
         },
         {
             "name": "theseer/fdomdocument",
