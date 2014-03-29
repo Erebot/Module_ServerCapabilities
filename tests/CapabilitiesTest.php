@@ -259,7 +259,7 @@ extends Erebot_Testenv_Module_TestCase
             FALSE,
             FALSE
         );
-        $words = new $wordsClass(strtolower('Erebot\\Module\\ServerCapabilities'));
+        $words = new $wordsClass('Erebot\\Module\\ServerCapabilities');
 
         $event = $this->getMock(
             '\\Erebot\\Interfaces\\Event\\ChanText',
