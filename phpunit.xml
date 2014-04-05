@@ -1,4 +1,4 @@
-<phpunit forceCoversAnnotation="true" bootstrap="tests/bootstrap.php">
+<phpunit bootstrap="tests/bootstrap.php">
   <testsuites>
     <testsuite name="Erebot/Module/ServerCapabilities">
       <directory>tests/</directory>
