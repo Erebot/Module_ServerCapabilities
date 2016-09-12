@@ -1,9 +1,9 @@
 {
-    "minimum-stability": "dev",
+    "prefer-stable": true,
     "name": "erebot/servercapabilities-module",
     "description": "Erebot module that determines what an IRC server is capable of",
     "keywords": ["Erebot", "IRC", "bot", "module"],
-    "homepage": "https://github.com/Erebot/Erebot_Module_ServerCapabilities",
+    "homepage": "https://github.com/Erebot/Module_ServerCapabilities",
     "license": "GPL-3.0+",
     "authors": [
         {
@@ -13,20 +13,18 @@
         }
     ],
     "support": {
-        "email": "erebot@erebot.net",
-        "issues": "https://github.com/Erebot/Erebot_Module_ServerCapabilities/issues",
-        "wiki": "http://erebot.github.io/Erebot_Module_ServerCapabilities/",
+        "issues": "https://github.com/Erebot/Module_ServerCapabilities/issues",
         "irc": "irc://irc.iiens.net/Erebot",
-        "source": "https://github.com/Erebot/Erebot_Module_ServerCapabilities"
+        "source": "https://github.com/Erebot/Module_ServerCapabilities"
     },
     "require": {
         "php": ">=5.3.0",
-        "erebot/api": "dev-master",
-        "erebot/generic-doc": "dev-master"
+        "erebot/api": "^0.7.1"
     },
     "require-dev": {
-        "erebot/buildenv": "~1.1",
-        "erebot/testenv": "~1.0"
+        "erebot/buildenv": "^1.1.0",
+        "erebot/testenv": "^1.1.2",
+        "erebot/generic-doc": "*"
     },
     "autoload": {
         "psr-4": {
