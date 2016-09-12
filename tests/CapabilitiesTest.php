@@ -54,11 +54,7 @@ extends Erebot_Testenv_Module_TestCase
 {
     protected function _mockNumeric($num, $source, $target, $text)
     {
-        $event = $this->getMock(
-            '\\Erebot\\Interfaces\\Event\\Numeric',
-            array(), array(), '', FALSE, FALSE
-        );
-
+        $event = $this->getMockBuilder('\\Erebot\\Interfaces\\Event\\Numeric')->getMock();
         $event
             ->expects($this->any())
             ->method('getConnection')
@@ -87,15 +83,9 @@ extends Erebot_Testenv_Module_TestCase
         $this->_module = new \Erebot\Module\ServerCapabilities(NULL);
         parent::setUp();
 
-        $profile = $this->getMock(
-            '\\Erebot\\NumericProfile\\Base',
-            array('offsetGet'),
-            array(),
-            '',
-            FALSE,
-            FALSE,
-            TRUE
-        );
+        $profile = $this->getMockBuilder('\\Erebot\\NumericProfile\\Base')
+            ->setMethods(array('offsetGet'))
+            ->getMock();
         $profile
             ->expects($this->any())
             ->method('offsetGet')
@@ -261,10 +251,7 @@ extends Erebot_Testenv_Module_TestCase
         );
         $words = new $wordsClass('Erebot\\Module\\ServerCapabilities');
 
-        $event = $this->getMock(
-            '\\Erebot\\Interfaces\\Event\\ChanText',
-            array(), array(), '', FALSE, FALSE
-        );
+        $event = $this->getMockBuilder('\\Erebot\\Interfaces\\Event\\ChanText')->getMock();
         $event
             ->expects($this->any())
             ->method('getChan')
