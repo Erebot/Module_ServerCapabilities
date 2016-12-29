@@ -1,0 +1,38 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016, Erebot
+# This file is distributed under the same license as the Erebot_Module_ServerCapabilities package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Erebot_Module_ServerCapabilities 1.0.x-dev\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-30 00:07+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/Configuration.rst:10
+msgid "Configuration"
+msgstr ""
+
+#: ../src/Configuration.rst:13
+msgid "Configuration options"
+msgstr ""
+
+#: ../src/Configuration.rst:15
+msgid "This module offers no configuration options."
+msgstr ""
+
+#: ../src/Configuration.rst:19
+msgid "Configuration example"
+msgstr ""
+
+#: ../src/Configuration.rst:21
+msgid "The recommended way to use this module is to have it loaded at the general configuration level and to disable it only for specific networks if needed."
+msgstr ""
+

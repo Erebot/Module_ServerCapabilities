@@ -1,0 +1,32 @@
+# French translations for Erebot_Module_ServerCapabilities package.
+# Copyright (C) 2011-2016, Erebot
+# This file is distributed under the same license as the Erebot_Module_ServerCapabilities package.
+# Automatically generated, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Erebot_Module_ServerCapabilities 1.0.x-dev\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-30 00:07+0100\n"
+"PO-Revision-Date: 2016-12-30 00:07+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#
+msgid "Detailed description"
+msgstr ""
+#
+msgid ""
+"This module provides a way to determine what an IRC server is capable of. It "
+"keeps information on supported features and also has a few helper methods "
+"(eg. to compare IRC nicknames using the right collation)."
+msgstr ""
+#
+msgid ""
+"Though not strictly necessary for the bot to operate correctly, it is "
+"recommended to have this module loaded as other modules may depend on it."
+msgstr ""
