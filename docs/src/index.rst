@@ -12,7 +12,6 @@ Contents:
 
     Description
     Prerequisites
-    generic/Installation
     Configuration
     Usage
 
