@@ -18,7 +18,7 @@
         "source": "https://github.com/Erebot/Module_ServerCapabilities"
     },
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=7.0",
         "erebot/api": "^0.8.0"
     },
     "require-dev": {
