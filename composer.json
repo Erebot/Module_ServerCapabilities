@@ -1,4 +1,4 @@
-
+{
     "prefer-stable": true,
     "name": "erebot/servercapabilities-module",
     "description": "Erebot module that determines what an IRC server is capable of",
