@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53fc43a3b72fe7edd0a82bb32566f6c4",
+    "content-hash": "5186ffd82d64ced507694854bd9710ad",
     "packages": [
         {
             "name": "erebot/api",
@@ -179,22 +179,21 @@
         },
         {
             "name": "erebot/timer",
-            "version": "0.1.0",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Timer.git",
-                "reference": "003845e0b2fc1025b949b1e79792122593ba16d5"
+                "reference": "cd04905d859221f9e216deba25693bc8906441f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Timer/zipball/003845e0b2fc1025b949b1e79792122593ba16d5",
-                "reference": "003845e0b2fc1025b949b1e79792122593ba16d5",
+                "url": "https://api.github.com/repos/Erebot/Timer/zipball/cd04905d859221f9e216deba25693bc8906441f5",
+                "reference": "cd04905d859221f9e216deba25693bc8906441f5",
                 "shasum": ""
             },
             "require": {
-                "erebot/callable-wrapper": "^1.0",
                 "ext-spl": "*",
-                "php": ">=5.3.0"
+                "php": ">=7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "*",
@@ -227,7 +226,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2016-08-02T19:32:31+00:00"
+            "time": "2018-05-11T21:59:50+00:00"
         },
         {
             "name": "erebot/uri",
@@ -724,20 +723,19 @@
         },
         {
             "name": "erebot/testenv",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Testenv.git",
-                "reference": "f4c16440e47f2cd9c0361c10808d1a4293942381"
+                "reference": "3c1df86c62f170ada26ddf50eb51eb1bc8510a63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Testenv/zipball/f4c16440e47f2cd9c0361c10808d1a4293942381",
-                "reference": "f4c16440e47f2cd9c0361c10808d1a4293942381",
+                "url": "https://api.github.com/repos/Erebot/Testenv/zipball/3c1df86c62f170ada26ddf50eb51eb1bc8510a63",
+                "reference": "3c1df86c62f170ada26ddf50eb51eb1bc8510a63",
                 "shasum": ""
             },
             "require": {
-                "erebot/callable-wrapper": "*",
                 "erebot/plop": "^0.6",
                 "erebot/styling": "^0.2.0",
                 "erebot/timer": "*",
@@ -770,7 +768,7 @@
             "keywords": [
                 "Erebot"
             ],
-            "time": "2018-05-11T16:41:27+00:00"
+            "time": "2018-05-11T22:02:25+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -3023,7 +3021,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.0"
+        "php": ">=7.0"
     },
     "platform-dev": []
 }
